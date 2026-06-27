@@ -1,0 +1,69 @@
+/* ============================================================
+   Tan Yanggu — Typography tokens (geek / terminal edition)
+   Two voices working together:
+     • SANS  — Space Grotesk. Technical neo-grotesque for display
+               and body. Display runs medium (500) + tight tracking
+               for an engineered, confident headline; 300 stays
+               available for the occasional airy moment.
+     • MONO  — JetBrains Mono. The geek signal: code, metadata,
+               eyebrows, nav, date codes, tool tags. Mono is
+               RATIONED to structural/technical text — never body.
+   CJK (日本語/中文) rides M PLUS 1 Code, a coding-grade Japanese
+   face, so bilingual runs keep the same terminal temperature.
+   Sizes are carried over from the live Astra theme scale.
+   ============================================================ */
+:root {
+  /* ---- Family ------------------------------------------ */
+  /* The whole site speaks terminal: JetBrains Mono everywhere,
+     M PLUS 1 Code carrying 日本語 in the same coding voice. */
+  --tyg-font-sans:    'JetBrains Mono', 'M PLUS 1 Code', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  --tyg-font-display: var(--tyg-font-sans);
+  /* The programmer's monospace — code, specs, meta, labels, tags */
+  --tyg-font-mono:    var(--tyg-font-sans);
+  /* Technical CJK — coding-grade kana + kanji */
+  --tyg-font-cjk:     'M PLUS 1 Code', 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif;
+
+  /* ---- Weights ----------------------------------------- */
+  --tyg-w-light:   300; /* @kind other */
+  --tyg-w-regular: 400; /* @kind other */
+  --tyg-w-medium:  500; /* @kind other */
+  --tyg-w-semi:    600; /* @kind other */
+  --tyg-w-bold:    700; /* @kind other */
+
+  /* ---- Type scale (px) --------------------------------- */
+  --tyg-text-xs:   13px;  /* meta / timestamps (mono)   */
+  --tyg-text-sm:   14px;  /* taxonomy / captions        */
+  --tyg-text-base: 16px;  /* body                       */
+  --tyg-text-md:   18px;  /* h5 / lead-ins              */
+  --tyg-text-lg:   20px;  /* h4 / project titles        */
+  --tyg-text-xl:   22px;  /* widget titles              */
+  --tyg-text-2xl:  24px;  /* h3                         */
+  --tyg-text-3xl:  30px;  /* h2                         */
+  --tyg-text-4xl:  36px;  /* h1                         */
+  --tyg-text-5xl:  52px;  /* page / section display     */
+  --tyg-text-6xl:  72px;  /* hero display               */
+
+  /* ---- Line heights ------------------------------------ */
+  --tyg-leading-tight:   1.15;  /* tight display          */
+  --tyg-leading-snug:    1.25;
+  --tyg-leading-heading: 1.3;
+  --tyg-leading-body:    1.65;
+  --tyg-leading-mono:    1.55;  /* code blocks / specs    */
+  --tyg-leading-loose:   1.9;
+
+  /* ---- Tracking ---------------------------------------- */
+  --tyg-tracking-tighter: -0.03em;  /* very large display       */
+  --tyg-tracking-tight:   -0.02em;  /* display / headings       */
+  --tyg-tracking-normal:  0;
+  --tyg-tracking-mono:    0.02em;   /* inline code / date codes */
+  --tyg-tracking-wide:    0.08em;   /* mono eyebrows / nav      */
+  --tyg-tracking-wider:   0.16em;   /* uppercase section labels */
+  --tyg-tracking-cjk:     0.01em;   /* near-flush, matches HOME's Latin baseline */
+
+  /* ---- Semantic roles ---------------------------------- */
+  --tyg-display-weight: var(--tyg-w-medium);   /* engineered, confident */
+  --tyg-heading-weight: var(--tyg-w-medium);
+  --tyg-body-weight:    var(--tyg-w-regular);
+  --tyg-meta-weight:    var(--tyg-w-medium);   /* JetBrains Mono medium */
+  --tyg-label-weight:   var(--tyg-w-medium);
+}

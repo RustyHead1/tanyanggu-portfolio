@@ -1,0 +1,11 @@
+/* ============================================================
+   Tan Yanggu — Webfonts (geek / terminal edition)
+   Three families, all from the Google Fonts CSS API:
+     • Space Grotesk — display + body. A technical neo-grotesque
+       with engineered curves; reads as "engineer's sans".
+     • JetBrains Mono — code, meta, labels, date codes. The
+       programmer's monospace; this is the geek signal.
+     • M PLUS 1 Code — CJK (日本語 / 中文). A coding-grade
+       Japanese face so 日本語 carries the same technical voice.
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&family=M+PLUS+1+Code:wght@400;500;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');

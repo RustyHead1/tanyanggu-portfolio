@@ -1,0 +1,27 @@
+<!-- @dsCard group="Spacing" viewport="700x190" name="Radii" subtitle="6px cards · 4px controls/tags · 9999px pills" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; background: var(--tyg-bg); padding: 26px; font-family: var(--tyg-font-sans); }
+  .row { display: flex; gap: 22px; align-items: flex-end; }
+  .item { text-align: center; }
+  .box { width: 92px; height: 70px; background: var(--tyg-ink-700); border: 1px solid var(--tyg-line-soft); }
+  .lbl { margin-top: 10px; }
+  .lbl .n { display:block; color: var(--tyg-fg); font-size: 12px; }
+  .lbl .h { color: var(--tyg-fg-faint); font-family: var(--tyg-font-mono); font-size: 10px; }
+  .pill { width: 92px; height: 36px; border-radius: 9999px; }
+</style>
+</head>
+<body>
+  <div class="row">
+    <div class="item"><div class="box" style="border-radius:3px"></div><div class="lbl"><span class="n">sm</span><span class="h">3px</span></div></div>
+    <div class="item"><div class="box" style="border-radius:4px"></div><div class="lbl"><span class="n">base · controls</span><span class="h">4px</span></div></div>
+    <div class="item"><div class="box" style="border-radius:6px"></div><div class="lbl"><span class="n">md · cards ★</span><span class="h">6px</span></div></div>
+    <div class="item"><div class="box" style="border-radius:10px"></div><div class="lbl"><span class="n">lg · media</span><span class="h">10px</span></div></div>
+    <div class="item"><div class="box pill"></div><div class="lbl"><span class="n">pill</span><span class="h">9999px</span></div></div>
+  </div>
+</body>
+</html>

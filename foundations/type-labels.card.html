@@ -1,0 +1,25 @@
+<!-- @dsCard group="Type" viewport="700x200" name="Labels & tracking" subtitle="Mono structural labels — eyebrows, nav, date codes" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; background: var(--tyg-bg); padding: 26px 30px; font-family: var(--tyg-font-sans); }
+  .stack { display: flex; flex-direction: column; gap: 18px; }
+  .line { display: flex; align-items: center; gap: 20px; }
+  .spec { font-family: var(--tyg-font-mono); font-size: 10px; letter-spacing: .04em; color: var(--tyg-fg-faint); width: 140px; flex: none; }
+  .eyebrow { font-family: var(--tyg-font-mono); text-transform: uppercase; letter-spacing: .16em; font-size: 12px; font-weight: 500; color: var(--tyg-fg-dim); }
+  .nav { display:flex; gap:26px; }
+  .nav span { font-family: var(--tyg-font-mono); text-transform: uppercase; letter-spacing: .08em; font-size: 13px; color: var(--tyg-fg); }
+  .nav span:first-child { color: var(--tyg-accent); }
+</style>
+</head>
+<body>
+  <div class="stack">
+    <div class="line"><span class="spec">EYEBROW · mono · .16em</span><span class="eyebrow">Selected Works</span></div>
+    <div class="line"><span class="spec">NAV · mono · .08em</span><div class="nav"><span>Works</span><span>Profile</span><span>Contact</span></div></div>
+    <div class="line"><span class="spec">DATE CODE · mono · .02em</span><span style="font-family:var(--tyg-font-mono);letter-spacing:.02em;color:var(--tyg-fg);font-size:15px;font-weight:500">2025.12</span></div>
+  </div>
+</body>
+</html>

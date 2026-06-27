@@ -1,0 +1,49 @@
+/* ============================================================
+   Tan Yanggu — Spacing, radii, shadow, layout tokens
+   Generous gallery whitespace. Sections breathe at 3em; the
+   grid holds at 1200px; corners are barely-there (4–6px).
+   ============================================================ */
+:root {
+  /* ---- Spacing scale (px) ------------------------------ */
+  --tyg-space-0:  0;
+  --tyg-space-1:  4px;
+  --tyg-space-2:  8px;
+  --tyg-space-3:  12px;
+  --tyg-space-4:  16px;
+  --tyg-space-5:  24px;
+  --tyg-space-6:  32px;
+  --tyg-space-7:  48px;   /* ~3em — section padding   */
+  --tyg-space-8:  64px;
+  --tyg-space-9:  96px;
+  --tyg-space-10: 128px;  /* hero / chapter breaks    */
+
+  /* ---- Radii ------------------------------------------- */
+  --tyg-radius-sm:   3px;   /* tag inner / badge        */
+  --tyg-radius:      4px;   /* buttons, inputs          */
+  --tyg-radius-md:   6px;   /* cards, thumbnails        */
+  --tyg-radius-lg:   10px;  /* large media frames       */
+  --tyg-radius-pill: 9999px;
+
+  /* ---- Borders ----------------------------------------- */
+  --tyg-border-width: 1px;
+  --tyg-border-width-strong: 2px;  /* nav underline accent / search */
+
+  /* ---- Shadows (quiet — the void already separates) ---- */
+  --tyg-shadow-card: 0 6px 15px -2px rgba(0, 0, 0, 0.45);
+  --tyg-shadow-pop:  0 18px 50px -12px rgba(0, 0, 0, 0.72);
+  --tyg-shadow-glow: 0 0 0 1px rgba(0, 127, 255, 0.4), 0 0 22px -4px rgba(0, 127, 255, 0.45);
+
+  /* ---- Layout ------------------------------------------ */
+  --tyg-container:        1200px;  /* normal content width  */
+  --tyg-container-wide:   1240px;  /* desktop max           */
+  --tyg-container-narrow: 750px;   /* prose / single post   */
+  --tyg-gutter:           20px;    /* grid gutter / inset   */
+  --tyg-section-pad:      48px;    /* 3em block padding     */
+
+  /* ---- Motion ------------------------------------------ */
+  --tyg-ease:          cubic-bezier(0.22, 0.61, 0.36, 1); /* @kind other */
+  --tyg-ease-out:      ease-out; /* @kind other */
+  --tyg-dur-fast:      0.2s; /* @kind other */
+  --tyg-dur:           0.3s; /* @kind other */
+  --tyg-dur-slow:      0.5s; /* @kind other */
+}

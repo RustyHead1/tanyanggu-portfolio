@@ -1,0 +1,106 @@
+<!-- @dsCard group="Components" viewport="760x620" name="Tag — terminal token (redesigned)" subtitle="Geek/minimal metadata system" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../../styles.css">
+<style>
+  html, body { margin: 0; background: var(--tyg-bg); }
+  .wrap { padding: 40px 44px; max-width: 760px; box-sizing: border-box; }
+  .lede { font-family: var(--tyg-font-mono); font-size: var(--tyg-text-xs); letter-spacing: var(--tyg-tracking-wide);
+          text-transform: uppercase; color: var(--tyg-fg-faint); }
+  h1 { font-family: var(--tyg-font-display); font-weight: var(--tyg-w-medium); letter-spacing: var(--tyg-tracking-tight);
+       font-size: var(--tyg-text-3xl); color: var(--tyg-fg-title); margin: 10px 0 4px; }
+  .sub { color: var(--tyg-fg-muted); font-size: var(--tyg-text-sm); margin: 0 0 30px; max-width: 52ch; line-height: 1.6; }
+  .block { padding: 22px 0; border-top: 1px solid var(--tyg-line-soft); }
+  .block:last-child { border-bottom: 1px solid var(--tyg-line-soft); }
+  .cap { font-family: var(--tyg-font-mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase;
+         color: var(--tyg-fg-faint); margin-bottom: 14px; }
+  .rowf { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
+  /* a quick stand-in project card to show tags in their native habitat */
+  .card { display: flex; gap: 16px; align-items: flex-start; }
+  .thumb { flex: none; width: 132px; height: 84px; border-radius: var(--tyg-radius-md); overflow: hidden;
+           background:
+             repeating-linear-gradient(135deg, #131315 0 9px, #0c0c0d 9px 18px); }
+  .ctitle { font-family: var(--tyg-font-display); font-weight: var(--tyg-w-medium); font-size: var(--tyg-text-lg);
+            color: var(--tyg-fg-title); letter-spacing: var(--tyg-tracking-tight); margin: 2px 0 10px; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="lede">Components / Core</div>
+    <h1>Tag — terminal token</h1>
+    <p class="sub">The signature metadata atom, redesigned geek-minimal: borderless mono with a faint
+      leading sigil. Hover brightens the sigil, crosses the label to electric blue, and wipes a hairline
+      accent underline in from the left.</p>
+
+    <div id="root"></div>
+  </div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script src="../../_ds_bundle.js"></script>
+  <script type="text/babel">
+    const { Tag, TagRow, DateCode } = window.TanYangguDesignSystem_bf6778;
+    function Demo() {
+      return (
+        <div>
+          <div className="block">
+            <div className="cap">Default — hash · the tag cloud</div>
+            <TagRow>
+              <Tag href="#">UnrealEngine</Tag>
+              <Tag href="#">TouchDesigner</Tag>
+              <Tag href="#">AfterEffects</Tag>
+              <Tag href="#">AI</Tag>
+              <Tag href="#">VJ</Tag>
+              <Tag active>Personal</Tag>
+            </TagRow>
+          </div>
+
+          <div className="block">
+            <div className="cap">Sigil variants — bracket · angle</div>
+            <div className="rowf">
+              <Tag variant="bracket" href="#">LiDAR</Tag>
+              <Tag variant="bracket" href="#">Unity</Tag>
+              <Tag variant="angle" href="#">Fulldome Projection</Tag>
+              <Tag variant="angle" href="#">VR</Tag>
+            </div>
+          </div>
+
+          <div className="block">
+            <div className="cap">Outline — filter / selectable chips</div>
+            <div className="rowf">
+              <Tag variant="outline" href="#">All</Tag>
+              <Tag variant="outline" active>Installation</Tag>
+              <Tag variant="outline" href="#">Performance</Tag>
+              <Tag variant="outline" href="#">Film</Tag>
+            </div>
+          </div>
+
+          <div className="block">
+            <div className="cap">In context — a work's metadata line</div>
+            <div className="card">
+              <div className="thumb"></div>
+              <div>
+                <div className="ctitle">A/V Performance at WeSA</div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 12 }}>
+                  <DateCode tone="dim">2025.12</DateCode>
+                  <span style={{ color: 'var(--tyg-fg-faint)' }}>·</span>
+                  <TagRow style={{ display: 'inline-flex' }}>
+                    <Tag href="#">AfterEffects</Tag>
+                    <Tag href="#">AI</Tag>
+                    <Tag href="#">UnrealEngine</Tag>
+                    <Tag href="#">VJ</Tag>
+                  </TagRow>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    ReactDOM.createRoot(document.getElementById('root')).render(<Demo />);
+  </script>
+</body>
+</html>

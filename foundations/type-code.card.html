@@ -1,0 +1,52 @@
+<!-- @dsCard group="Type" viewport="700x340" name="Mono — JetBrains Mono" subtitle="The geek signal: code, specs, tool tags" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; background: var(--tyg-bg); padding: 26px 30px; font-family: var(--tyg-font-mono); }
+  .grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: 26px; align-items: start; }
+  .spec { font-family: var(--tyg-font-mono); font-size: 10px; letter-spacing: .04em; color: var(--tyg-fg-faint); margin-bottom: 10px; text-transform: uppercase; }
+  pre { margin: 0; font-family: var(--tyg-font-mono); font-size: 12.5px; line-height: 1.55; letter-spacing: .02em; color: var(--tyg-fg); white-space: pre; }
+  .cmt { color: var(--tyg-fg-faint); }
+  .acc { color: var(--tyg-accent); }
+  .dim { color: var(--tyg-fg-dim); }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag { font-family: var(--tyg-font-mono); font-size: 12px; letter-spacing: .02em; color: var(--tyg-fg); border: 1px solid var(--tyg-fg); border-radius: 4px; padding: 4px 9px; }
+  .readout { display:flex; flex-direction:column; gap:9px; }
+  .kv { display:flex; gap:12px; font-size:12.5px; letter-spacing:.02em; }
+  .kv .k { color: var(--tyg-fg-faint); width: 78px; flex:none; }
+  .kv .v { color: var(--tyg-fg); }
+</style>
+</head>
+<body>
+  <div class="grid">
+    <div>
+      <div class="spec">Code · 12.5 / 1.55</div>
+<pre><span class="cmt">// real-time CG · 60fps target</span>
+<span class="acc">const</span> scene = <span class="acc">new</span> Renderer({
+  engine: <span class="dim">"UnrealEngine"</span>,
+  lidar : <span class="acc">true</span>,
+  fps   : <span class="dim">60</span>,
+});
+scene.<span class="dim">render</span>();</pre>
+    </div>
+    <div>
+      <div class="spec">Tool tags</div>
+      <div class="tags">
+        <span class="tag">UnrealEngine</span>
+        <span class="tag">TouchDesigner</span>
+        <span class="tag">LiDAR</span>
+        <span class="tag">VR</span>
+      </div>
+      <div class="spec" style="margin-top:20px">Spec readout</div>
+      <div class="readout">
+        <div class="kv"><span class="k">date</span><span class="v">2025.12</span></div>
+        <div class="kv"><span class="k">medium</span><span class="v">Interactive Installation</span></div>
+        <div class="kv"><span class="k">runtime</span><span class="v">real-time / 60fps</span></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

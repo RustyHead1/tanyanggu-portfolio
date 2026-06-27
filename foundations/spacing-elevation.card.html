@@ -1,0 +1,28 @@
+<!-- @dsCard group="Spacing" viewport="700x190" name="Elevation" subtitle="The void separates; shadows stay quiet" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; background: var(--tyg-bg); padding: 30px; font-family: var(--tyg-font-sans); }
+  .row { display: flex; gap: 30px; align-items: center; }
+  .item { text-align: center; }
+  .box { width: 150px; height: 84px; background: var(--tyg-ink-700); border-radius: var(--tyg-radius-md); }
+  .flat { border: 1px solid var(--tyg-line-soft); }
+  .card { box-shadow: var(--tyg-shadow-card); }
+  .pop { box-shadow: var(--tyg-shadow-pop); }
+  .glow { box-shadow: var(--tyg-shadow-glow); }
+  .lbl { margin-top: 12px; color: var(--tyg-fg); font-size: 12px; }
+  .lbl small { display:block; color: var(--tyg-fg-faint); font-family: var(--tyg-font-mono); font-size: 10px; }
+</style>
+</head>
+<body>
+  <div class="row">
+    <div class="item"><div class="box flat"></div><div class="lbl">flat <small>1px soft rule</small></div></div>
+    <div class="item"><div class="box card"></div><div class="lbl">shadow-card <small>0 6 15 / .45</small></div></div>
+    <div class="item"><div class="box pop"></div><div class="lbl">shadow-pop <small>0 18 50 / .72</small></div></div>
+    <div class="item"><div class="box glow"></div><div class="lbl">glow <small>accent focus</small></div></div>
+  </div>
+</body>
+</html>

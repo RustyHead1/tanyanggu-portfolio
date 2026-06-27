@@ -1,0 +1,520 @@
+<!-- @dsCard group="Portfolio" viewport="1240x780" -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tan Yanggu | Portfolio</title>
+<link rel="icon" href="../../assets/favicon.png">
+<link rel="stylesheet" href="../../styles.css">
+
+<!-- Standalone bundle: JS-referenced assets lifted for the inliner -->
+<meta name="ext-resource-dependency" content="media/home-bg.webm" data-resource-id="heroVideo" />
+<meta name="ext-resource-dependency" content="../../assets/favicon.png" data-resource-id="favicon" />
+<meta name="ext-resource-dependency" content="../../assets/images/perf-wesa.jpg" data-resource-id="img_perfwesa" />
+<meta name="ext-resource-dependency" content="../../assets/images/perf-lee-1.jpg" data-resource-id="img_perflee1" />
+<meta name="ext-resource-dependency" content="../../assets/images/perf-lee-2.jpg" data-resource-id="img_perflee2" />
+<meta name="ext-resource-dependency" content="../../assets/images/emergent-cosmos.jpg" data-resource-id="img_emergent" />
+<meta name="ext-resource-dependency" content="../../assets/images/fulldome-body.jpg" data-resource-id="img_fulldome" />
+<meta name="ext-resource-dependency" content="../../assets/images/key-visual.jpg" data-resource-id="img_keyvisual" />
+
+<template id="__bundler_thumbnail" data-bg-color="#0a0a0b">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#0a0a0b"/>
+    <rect x="60" y="60" width="1080" height="680" fill="none" stroke="#2a2a2e" stroke-width="2"/>
+    <text x="90" y="470" font-family="Helvetica, Arial, sans-serif" font-size="150" font-weight="300" letter-spacing="4" fill="#f3f3f3">TAN</text>
+    <text x="90" y="620" font-family="Helvetica, Arial, sans-serif" font-size="150" font-weight="300" letter-spacing="4" fill="#f3f3f3">YANGGU</text>
+    <rect x="860" y="150" width="160" height="100" fill="#16161a" stroke="#2a2a2e" stroke-width="1.5"/>
+    <rect x="930" y="320" width="120" height="80" fill="#16161a" stroke="#2a2a2e" stroke-width="1.5"/>
+  </svg>
+</template>
+<style>
+  html, body { margin: 0; background: var(--tyg-bg); min-height: 100vh; }
+
+  /* CRT-4 retro filter — flicker + horizontal-hold drift */
+  @keyframes tyg-crt-flicker {
+    0%,100% { opacity: 0.92; }
+    8%   { opacity: 0.84; }
+    9%   { opacity: 0.95; }
+    20%  { opacity: 0.88; }
+    50%  { opacity: 0.93; }
+    51%  { opacity: 0.86; }
+    70%  { opacity: 0.94; }
+  }
+  @keyframes tyg-crt-roll {
+    0%   { background-position: 0 0; }
+    100% { background-position: 0 100vh; }
+  }
+  @keyframes tyg-grain {
+    0%   { transform: translate(0,0); }
+    25%  { transform: translate(-4%,3%); }
+    50%  { transform: translate(3%,-5%); }
+    75%  { transform: translate(-3%,-2%); }
+    100% { transform: translate(0,0); }
+  }
+  /* ── Looping blueprint-overlay animations ───────────────────────────── */
+  @keyframes tyg-scan  { 0% { left: 0%;  opacity: 0; } 10% { opacity: .85; } 90% { opacity: .85; } 100% { left: 100%; opacity: 0; } }
+  @keyframes tyg-sweep { 0% { top: 0%;   opacity: 0; } 12% { opacity: .7; }  88% { opacity: .7; }  100% { top: 100%;  opacity: 0; } }
+  @keyframes tyg-blink { 0%,100% { opacity: .18; } 50% { opacity: .9; } }
+  @keyframes tyg-arrow-r { 0%,100% { transform: translateX(0); } 50% { transform: translateX(8px); } }
+  @keyframes tyg-arrow-l { 0%,100% { transform: translateX(0); } 50% { transform: translateX(-8px); } }
+  @keyframes tyg-block { 0%,100% { opacity: .07; transform: translateY(0); } 50% { opacity: .2; transform: translateY(-7px); } }
+  @keyframes tyg-frost { 0%,100% { opacity: .55; transform: translateY(0); } 50% { opacity: .9; transform: translateY(-9px); } }
+  @keyframes tyg-rotate { to { transform: rotate(360deg); } }
+  @keyframes tyg-scrollcue { 0%,100% { transform: translateY(0); opacity: .5; } 50% { transform: translateY(7px); opacity: 1; } }
+  .tyg-scrollcue { animation: tyg-scrollcue 1.9s ease-in-out infinite; }
+
+  /* ── Scroll-reveal for the home sections (works / about) ─────────────── */
+  @keyframes tyg-rise {
+    from { opacity: 0; transform: translateY(72px); filter: blur(16px); }
+    to   { opacity: 1; transform: translateY(0);    filter: blur(0); }
+  }
+  .tyg-reveal { opacity: 0; }
+  @supports (animation-timeline: view()) {
+    .tyg-reveal {
+      opacity: 1;
+      animation: tyg-rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 30%;
+      will-change: opacity, transform, filter;
+    }
+  }
+  @supports not (animation-timeline: view()) { .tyg-reveal { opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) {
+    .tyg-scrollcue { animation: none; }
+    .tyg-reveal { animation: none !important; opacity: 1 !important; }
+  }
+
+  /* ── First-paint intro — staggered, displacement-based ease-in for the
+       hero foreground. Each element holds hidden (paused on its first
+       keyframe) until .tyg-go is set on the foreground root, then eases in
+       from a small offset with per-element delays so nothing lands in sync. */
+  @keyframes tyg-intro {
+    from { opacity: 0; transform: translate(var(--ix, 0px), var(--iy, 26px)); }
+    to   { opacity: 1; transform: translate(0, 0); }
+  }
+  @keyframes tyg-intro-cx {   /* for elements resting at translateX(-50%) */
+    from { opacity: 0; transform: translate(-50%, var(--iy, 26px)); }
+    to   { opacity: 1; transform: translate(-50%, 0); }
+  }
+  .tyg-intro, .tyg-intro-cx { opacity: 0; }   /* hold hidden until released */
+  .tyg-go .tyg-intro    { animation: tyg-intro    1.05s cubic-bezier(.16,.83,.31,1) both; }
+  .tyg-go .tyg-intro-cx { animation: tyg-intro-cx 1.05s cubic-bezier(.16,.83,.31,1) both; }
+
+  /* growth — each blueprint line draws out from one end and each frosted
+     block scales up from nothing, individually staggered via --gd, eased. */
+  @keyframes tyg-grow-v   { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+  @keyframes tyg-grow-h   { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  @keyframes tyg-grow-box { from { opacity: 0; transform: scale(0); } to { opacity: 1; transform: scale(1); } }
+  .tyg-grow-v   { transform: scaleY(0); transform-origin: top; }
+  .tyg-grow-h   { transform: scaleX(0); transform-origin: left; }
+  .tyg-grow-box { opacity: 0; transform: scale(0); }
+  .tyg-go .tyg-grow-v   { animation: tyg-grow-v   2.1s  cubic-bezier(.25,1,.5,1) var(--gd, 0s) both; }
+  .tyg-go .tyg-grow-h   { animation: tyg-grow-h   2.1s  cubic-bezier(.25,1,.5,1) var(--gd, 0s) both; }
+  .tyg-go .tyg-grow-box { animation: tyg-grow-box 1.8s  cubic-bezier(.22,.9,.3,1)  var(--gd, 0s) both; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tyg-intro, .tyg-intro-cx { animation: none !important; opacity: 1 !important; }
+    .tyg-grow-v, .tyg-grow-h, .tyg-grow-box { animation: none !important; transform: none !important; opacity: 1 !important; }
+  }
+  /* slow organic camera drift on the hero media — echoes the reference's flowing field */
+  @keyframes tyg-kenburns {
+    0%   { transform: scale(1.06) translate(0, 0); }
+    50%  { transform: scale(1.13) translate(-1.6%, -1.1%); }
+    100% { transform: scale(1.06) translate(0, 0); }
+  }
+  .tyg-kenburns { animation: tyg-kenburns 30s ease-in-out infinite; will-change: transform; }
+  .tyg-scan    { animation: tyg-scan 7s cubic-bezier(.6,0,.4,1) infinite; }
+  .tyg-sweep   { animation: tyg-sweep 11s ease-in-out infinite; }
+  .tyg-blink   { animation: tyg-blink 3.2s ease-in-out infinite; }
+  .tyg-arrow-r { animation: tyg-arrow-r 1.8s ease-in-out infinite; }
+  .tyg-arrow-l { animation: tyg-arrow-l 1.8s ease-in-out infinite; }
+  .tyg-block   { animation: tyg-block 6s ease-in-out infinite; }
+  .tyg-frost   { animation: tyg-frost 6s ease-in-out infinite; }
+  .tyg-rotate  { animation: tyg-rotate 9s linear infinite; }
+  @media (prefers-reduced-motion: reduce) {
+    .tyg-scan,.tyg-sweep,.tyg-blink,.tyg-arrow-r,.tyg-arrow-l,.tyg-block,.tyg-frost,.tyg-rotate,.tyg-kenburns { animation: none; }
+  }
+
+  /* ── Selected Works — Osmo-style infinite slider ─────────────────────── */
+  /* base (resting) states — GSAP drives the active transitions in JS to avoid a transition race */
+  .tyg-ws-slide      { opacity: .26; flex: none; position: relative; cursor: pointer;
+                       width: clamp(300px, 36vw, 540px); height: clamp(260px, 32vw, 460px);
+                       padding-left: 16px; padding-right: 16px; box-sizing: border-box; }
+  .tyg-ws-cap        { opacity: 0; transform: translateY(10px); }
+  .tyg-ws-card       { transition: transform .55s var(--tyg-ease); will-change: transform; }
+  .tyg-ws-slide.active:hover .tyg-ws-card { transform: scale(1.045); }
+  .tyg-ws-btn        { position: relative;
+                       transition: transform .475s var(--tyg-ease), opacity .3s var(--tyg-ease),
+                                   color .3s var(--tyg-ease), border-color .3s var(--tyg-ease); }
+  .tyg-ws-btn:hover  { transform: scale(.88); color: var(--tyg-accent); border-color: var(--tyg-accent); }
+  .tyg-ws-corners    { position: absolute; inset: -1px; pointer-events: none;
+                       transition: transform .475s var(--tyg-ease); }
+  .tyg-ws-btn:hover .tyg-ws-corners { transform: scale(1.32); }
+  .tyg-ws-nav:hover .tyg-ws-btn:not(:hover) { opacity: .4; }
+  @media (prefers-reduced-motion: reduce) {
+    .tyg-ws-slide, .tyg-ws-cap, .tyg-ws-btn, .tyg-ws-corners, .tyg-ws-card { transition: none; }
+  }
+
+  /* About grid — stacks under a narrow breakpoint so the portrait + bio never
+     get squeezed; portrait caps its width when stacked so it stays tasteful. */
+  @media (max-width: 720px) {
+    .tyg-about-grid { grid-template-columns: 1fr !important; }
+    .tyg-about-grid > :first-child { max-width: 320px; }
+  }
+  /* Short viewports — sections that center their content shouldn't trap the
+     top of overflowing content under the nav; fall back to flow-from-top. */
+  @media (max-height: 720px) {
+    .tyg-home-section { justify-content: flex-start !important; }
+  }
+
+  .tyg-footer {
+    border-top: 1px solid var(--tyg-line-soft);
+    background: var(--tyg-bg-deep);
+    color: var(--tyg-fg-faint);
+    font-size: 13px;
+    padding: 22px 20px;
+    text-align: center;
+  }
+
+  /* ════════════════════════════════════════════════════════════════════
+     Boot loader — monochrome glass cube tumbling on 3 axes around a
+     glowing orb, finished with a film-grain post-process pass.
+     Visible from first paint; fades once the React app has mounted.
+     ════════════════════════════════════════════════════════════════════ */
+  #tyg-loader {
+    position: fixed; inset: 0; z-index: 9999;
+    display: grid; place-items: center;
+    background: var(--tyg-bg-void);
+    transition: opacity .85s var(--tyg-ease, ease), visibility .85s;
+  }
+  #tyg-loader.tyg-loaded { opacity: 0; visibility: hidden; pointer-events: none; }
+
+  /* soft lift behind the cube so it reads on the void */
+  #tyg-loader::before {
+    content: ""; position: absolute; left: 50%; top: 50%;
+    width: 360px; height: 360px; transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(243,243,243,0.10) 0%, rgba(10,10,11,0) 62%);
+    pointer-events: none;
+  }
+
+  .tyg-scene { --s: 116px; position: relative; width: var(--s); height: var(--s); perspective: 300px; perspective-origin: 50% 42%; }
+
+  .tyg-spin-x, .tyg-spin-y, .tyg-outer {
+    position: absolute; inset: 0; transform-style: preserve-3d;
+  }
+  /* per-axis rotation, each a different speed — a continuous tumble */
+  .tyg-spin-x { animation: tyg-rx 8.5s linear infinite; }
+  .tyg-spin-y { animation: tyg-ry 5.5s linear infinite; }
+  .tyg-outer  { animation: tyg-rz 13s  linear infinite; }
+  @keyframes tyg-rx { to { transform: rotateX(360deg); } }
+  @keyframes tyg-ry { to { transform: rotateY(360deg); } }
+  @keyframes tyg-rz { to { transform: rotateZ(360deg); } }
+
+  .tyg-face {
+    position: absolute; width: var(--s); height: var(--s);
+    background: linear-gradient(135deg, rgba(243,243,243,0.11), rgba(243,243,243,0.015));
+    border: 1px solid rgba(243,243,243,0.16);
+    box-shadow:
+      inset 0 0 2px 0   rgba(243,243,243,0.42),
+      inset 0 0 30px -8px rgba(243,243,243,0.14),
+      inset 0 0 64px -8px rgba(243,243,243,0.07),
+      inset 0 0 40px 18px rgba(0,0,0,0.16);
+  }
+  .tyg-face.f-front  { transform: translateZ(calc(var(--s) / 2)); }
+  .tyg-face.f-back   { transform: rotateY(180deg) translateZ(calc(var(--s) / 2)); }
+  .tyg-face.f-right  { transform: rotateY(90deg)  translateZ(calc(var(--s) / 2)); }
+  .tyg-face.f-left   { transform: rotateY(-90deg) translateZ(calc(var(--s) / 2)); }
+  .tyg-face.f-top    { transform: rotateX(90deg)  translateZ(calc(var(--s) / 2)); }
+  .tyg-face.f-bottom { transform: rotateX(-90deg) translateZ(calc(var(--s) / 2)); }
+
+  /* the orb caged inside — stays centred while the glass tumbles */
+  .tyg-core {
+    position: absolute; top: 50%; left: 50%; z-index: 2;
+    width: 50px; height: 50px; margin: -25px 0 0 -25px; border-radius: 50%;
+    background: radial-gradient(circle at 36% 30%, #ffffff 0%, #e6e6e6 32%, #9a9a9a 64%, #2a2a2a 100%);
+    box-shadow:
+      0 0 26px 5px rgba(243,243,243,0.22),
+      inset -6px -9px 18px rgba(0,0,0,0.5),
+      inset 5px 6px 12px rgba(255,255,255,0.32);
+    filter: blur(2.6px);
+    animation: tyg-core-pulse 3.4s ease-in-out infinite;
+  }
+  @keyframes tyg-core-pulse {
+    0%, 100% { transform: scale(1);    box-shadow: 0 0 24px 4px rgba(243,243,243,0.18), inset -6px -9px 18px rgba(0,0,0,0.5), inset 5px 6px 12px rgba(255,255,255,0.32); }
+    50%      { transform: scale(1.09); box-shadow: 0 0 34px 7px rgba(243,243,243,0.30), inset -6px -9px 18px rgba(0,0,0,0.5), inset 5px 6px 12px rgba(255,255,255,0.32); }
+  }
+
+  /* film-grain post-process — sits above everything in the loader */
+  .tyg-loader-noise {
+    position: absolute; inset: 0; z-index: 5; pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+    opacity: 0.32; mix-blend-mode: overlay;
+    animation: tyg-grain 0.55s steps(2) infinite;
+  }
+
+  /* mono boot ticker, matching the site's terminal voice */
+  .tyg-loader-meta {
+    position: absolute; left: 50%; bottom: 12%; transform: translateX(-50%); z-index: 6;
+    font-family: var(--tyg-font-mono); font-size: 10.5px; letter-spacing: 0.28em;
+    text-transform: uppercase; color: var(--tyg-fg-faint);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .tyg-loader-meta .dot {
+    width: 5px; height: 5px; border-radius: 50%; background: var(--tyg-fg-faint);
+    animation: tyg-blink 1.4s ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tyg-spin-x, .tyg-spin-y, .tyg-outer, .tyg-core, .tyg-loader-noise, .tyg-loader-meta .dot { animation: none; }
+  }
+</style>
+</head>
+<body>
+  <!-- Boot loader — painted before any script loads, removed once the app mounts -->
+  <div id="tyg-loader">
+    <div class="tyg-scene">
+      <div class="tyg-spin-x">
+        <div class="tyg-spin-y">
+          <div class="tyg-outer">
+            <div class="tyg-face f-front"></div>
+            <div class="tyg-face f-back"></div>
+            <div class="tyg-face f-right"></div>
+            <div class="tyg-face f-left"></div>
+            <div class="tyg-face f-top"></div>
+            <div class="tyg-face f-bottom"></div>
+          </div>
+        </div>
+      </div>
+      <div class="tyg-core"></div>
+    </div>
+    <div class="tyg-loader-meta"><span class="dot"></span>Loading</div>
+    <div class="tyg-loader-noise"></div>
+  </div>
+
+  <div id="app"></div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <!-- GSAP + Draggable + Inertia — powers the Selected Works infinite slider -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Draggable.min.js"></script>
+
+  <script>window.TYG_BASE = '../../';</script>
+  <script src="../../_ds_bundle.js"></script>
+  <script src="data.js"></script>
+  <script type="text/babel" src="LandingScreen.jsx"></script>
+  <script type="text/babel" src="HomeScreen.jsx"></script>
+  <script type="text/babel" src="ProjectScreen.jsx"></script>
+  <script type="text/babel" src="ProfileScreen.jsx"></script>
+  <script type="text/babel" src="HomeSections.jsx"></script>
+
+  <script type="text/babel">
+    const { NavBar, Button, Eyebrow } = window.TanYangguDesignSystem_bf6778;
+
+    function ContactScreen({ lang, setLang }) {
+      return (
+        <div>
+          <NavBar lang={lang} onLangChange={setLang} brand="Tan Yanggu" brandSuffix="Portfolio"
+            links={[
+              { label: 'Home', href: '#/' },
+              { label: 'Works', href: '#/works' },
+              { label: 'Profile', href: '#/profile' },
+              { label: 'Contact', href: '#/contact', current: true },
+            ]} />
+          <main style={{ maxWidth: 'var(--tyg-container-narrow)', margin: '0 auto', padding: '96px clamp(20px, 5vw, 72px)' }}>
+            <Eyebrow>Contact</Eyebrow>
+            <h1 style={{ margin: '12px 0 24px', fontSize: 'var(--tyg-text-4xl)', fontWeight: 300 }}>
+              {lang === 'JA' ? '制作・パフォーマンスのご依頼' : 'For commissions & performances'}
+            </h1>
+            <p style={{ fontSize: 'var(--tyg-text-md)', lineHeight: 1.8, color: 'var(--tyg-fg)', fontWeight: 300, maxWidth: 540 }}>
+              {lang === 'JA'
+                ? 'インスタレーション、A/Vパフォーマンス、VJのご依頼はメールにてお問い合わせください。'
+                : 'For installation, A/V performance, or VJ enquiries, please get in touch by email.'}
+            </p>
+            <div style={{ display: 'flex', gap: 12, marginTop: 28 }}>
+              <Button variant="solid" href="mailto:hello@tanyanggu.com">hello@tanyanggu.com</Button>
+              <Button variant="ghost" href="#/works">{lang === 'JA' ? '作品を見る' : 'View works'}</Button>
+            </div>
+          </main>
+        </div>
+      );
+    }
+
+    function parseRoute() {
+      const h = (location.hash || '#/').replace(/^#/, '');
+      const m = h.match(/^\/work\/(.+)$/);
+      if (m) return { name: 'work', slug: m[1] };
+      if (h === '/works') return { name: 'works' };
+      if (h === '/profile') return { name: 'profile' };
+      if (h === '/contact') return { name: 'contact' };
+      return { name: 'home' };
+    }
+
+    // ════════════════════════════════════════════════════════════════════
+    // Page transitions — fade the outgoing screen out, fade the incoming in.
+    // GSAP is already on the page; survives React re-renders and the home
+    // screen's fixed hero.
+    // ════════════════════════════════════════════════════════════════════
+    const REDUCED_TX = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    let txToken = 0;
+    function runTransition(prev, next, wrapEl, swap) {
+      const gsap = window.gsap;
+      if (REDUCED_TX || !gsap || !wrapEl) { swap(); window.scrollTo(0, 0); return; }
+      const token = ++txToken;
+      const prevHome = prev.name === 'home';     // home's hero is position:fixed — filter:none
+      gsap.killTweensOf(wrapEl);                  // avoids a containing block on its wrapper
+      // EXIT — fade the outgoing screen out. Sequencing runs on timers (not the
+      // rAF ticker) so navigation still completes if the tab is backgrounded.
+      gsap.to(wrapEl, { opacity: 0, filter: prevHome ? 'none' : 'blur(10px)', duration: 0.34, ease: 'power2.in' });
+
+      let swapped = false, entered = false;
+      function doSwap() {
+        if (swapped || token !== txToken) return; swapped = true;
+        swap(); window.scrollTo(0, 0);
+        requestAnimationFrame(() => requestAnimationFrame(enter));
+        setTimeout(enter, 90);                    // belt-and-braces if rAF is paused
+      }
+      setTimeout(doSwap, 360);
+
+      function enter() {
+        if (entered || token !== txToken) return; entered = true;
+        const nextHome = next.name === 'home';
+        gsap.killTweensOf(wrapEl);
+        gsap.fromTo(wrapEl,
+          { opacity: 0, filter: nextHome ? 'none' : 'blur(10px)' },
+          { opacity: 1, filter: 'blur(0px)', duration: 0.52, ease: 'power2.out', clearProps: 'filter,willChange' });
+        // hard fallback — never leave the screen faded out, even if gsap stalls
+        setTimeout(() => { if (token === txToken) { wrapEl.style.opacity = '1'; wrapEl.style.filter = ''; } }, 1000);
+      }
+    }
+
+    function App() {
+      const [route, setRoute] = React.useState(parseRoute());
+      const [lang, setLang] = React.useState('JA');
+      const wrapRef = React.useRef(null);
+      const routeRef = React.useRef(route);
+
+      React.useEffect(() => {
+        const on = () => {
+          const next = parseRoute();
+          const prev = routeRef.current;
+          if (prev.name === next.name && prev.slug === next.slug) return;
+          runTransition(prev, next, wrapRef.current, () => { routeRef.current = next; setRoute(next); });
+        };
+        window.addEventListener('hashchange', on);
+        return () => window.removeEventListener('hashchange', on);
+      }, []);
+
+      let screen;
+      if (route.name === 'work') screen = <window.ProjectScreen slug={route.slug} lang={lang} setLang={setLang} />;
+      else if (route.name === 'works') screen = <window.HomeScreen lang={lang} setLang={setLang} />;
+      else if (route.name === 'profile') screen = <window.ProfileScreen lang={lang} setLang={setLang} />;
+      else if (route.name === 'contact') screen = <ContactScreen lang={lang} setLang={setLang} />;
+      else screen = (
+        <div style={{ position: 'relative' }}>
+          <window.LandingScreen lang={lang} setLang={setLang} />
+          {/* transparent spacer — the pinned hero shows through it; scrolling
+              past it lifts HomeSections up to cover the hero */}
+          <div aria-hidden="true" style={{ height: '100vh' }} />
+          {window.HomeSections && <window.HomeSections lang={lang} />}
+          {window.HomeNav && <window.HomeNav lang={lang} setLang={setLang} />}
+        </div>
+      );
+
+      const isHome = route.name === 'home';
+      return (
+        <div>
+          <div ref={wrapRef} style={{ willChange: 'opacity' }}>
+            {screen}
+            {!isHome && <footer className="tyg-footer">Copyright © 2026 Tan Yanggu | Portfolio |</footer>}
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('app')).render(<App />);
+  </script>
+
+  <!-- Smooth-wheel easing — lerp the page toward a wheel-driven target so mouse-wheel
+       scrolling glides instead of stepping. Stays in sync with programmatic scrollTo
+       (route transitions), keyboard, and scrollbar drags. Skipped under reduced-motion. -->
+  <script>
+    (function () {
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      var target = window.scrollY;
+      var current = window.scrollY;
+      var EASE = 0.05;          // lower = silkier/longer glide
+      var animating = false;
+
+      function maxScroll() {
+        return Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+      }
+
+      function tick() {
+        current += (target - current) * EASE;
+        if (Math.abs(target - current) < 0.4) { current = target; animating = false; }
+        window.scrollTo(0, Math.round(current));
+        if (animating) requestAnimationFrame(tick);
+      }
+
+      function onWheel(e) {
+        if (e.ctrlKey) return;                 // let pinch-zoom through
+        var max = maxScroll();
+        if (max <= 0) return;
+        e.preventDefault();
+        var delta = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? window.innerHeight : 1);
+        target = Math.max(0, Math.min(target + delta, max));
+        if (!animating) { animating = true; current = window.scrollY; requestAnimationFrame(tick); }
+      }
+
+      // When the page is scrolled by anything other than our loop (keyboard,
+      // scrollbar, programmatic scrollTo), resync so the next wheel starts clean.
+      window.addEventListener('scroll', function () {
+        if (!animating) { target = current = window.scrollY; }
+      }, { passive: true });
+
+      window.addEventListener('wheel', onWheel, { passive: false });
+    })();
+  </script>
+
+  <!-- Dismiss the boot loader once the React app has rendered (min on-screen time so it never flashes) -->
+  <script>
+    (function () {
+      var loader = document.getElementById('tyg-loader');
+      if (!loader) return;
+      var start = Date.now(), MIN = 750, done = false, bound = false;
+      function hide() {
+        if (done) return; done = true;
+        var wait = Math.max(0, MIN - (Date.now() - start));
+        setTimeout(function () {
+          loader.classList.add('tyg-loaded');
+          setTimeout(function () { if (loader.parentNode) loader.parentNode.removeChild(loader); }, 900);
+        }, wait);
+      }
+      function poll() {
+        var app = document.getElementById('app');
+        if (!(app && app.children.length)) { setTimeout(poll, 60); return; }
+        // app has mounted — now also wait for the hero video to be playable
+        var vid = document.querySelector('video');
+        if (!vid) { hide(); return; }                 // no video on this route
+        if (vid.readyState >= 3) { hide(); return; }  // enough data buffered to play
+        if (!bound) {
+          bound = true;
+          ['canplaythrough', 'loadeddata', 'playing', 'error', 'stalled'].forEach(function (ev) {
+            vid.addEventListener(ev, hide, { once: true });
+          });
+        }
+        setTimeout(poll, 80);
+      }
+      poll();
+      setTimeout(hide, 12000); // safety net — never trap the user behind a slow/broken video
+    })();
+  </script>
+</body>
+</html>

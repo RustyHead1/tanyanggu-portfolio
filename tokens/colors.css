@@ -1,0 +1,64 @@
+/* ============================================================
+   Tan Yanggu — Color tokens
+   A cinematic near-black gallery palette. The void does the
+   framing; off-white type carries the content; one electric
+   blue is the only chromatic accent (links, focus, hover).
+   Sampled directly from tanyanggu.com (Astra theme overrides).
+   ============================================================ */
+:root {
+  /* ---- Ink: the near-black canvas scale ---------------- */
+  --tyg-black:     #000000;
+  --tyg-ink-900:   #0a0a0b;  /* deepest void — full-bleed media wells */
+  --tyg-ink-850:   #100f0f;  /* footer / sunken sections             */
+  --tyg-ink-800:   #0f0f10;  /* CANONICAL page background + cards     */
+  --tyg-ink-700:   #18181a;  /* raised surface / menus                */
+  --tyg-ink-600:   #1d1d1d;  /* control chip (scroll-to-top)          */
+  --tyg-ink-500:   #2a2a2d;  /* hairline on dark / input wells        */
+  --tyg-ink-400:   #3a3a3a;  /* disabled / faint rule                 */
+
+  /* ---- Foreground: off-white type on the void ---------- */
+  --tyg-white:     #ffffff;
+  --tyg-fg:        #f3f3f3;  /* primary text + resting links          */
+  --tyg-fg-title:  #f2f2f2;  /* headings / site title                 */
+  --tyg-fg-muted:  #a8a8a8;  /* quotes, secondary copy                */
+  --tyg-fg-dim:    #9ca3af;  /* meta, placeholders, captions          */
+  --tyg-fg-faint:  #6b6b6e;  /* timestamps, dividers' labels          */
+
+  /* ---- Accent: the single electric blue ---------------- */
+  --tyg-accent:        #007fff;  /* link / button hover, focus glow   */
+  --tyg-accent-deep:   #046bd2;  /* pressed / input focus border      */
+  --tyg-accent-deeper: #045cb4;  /* deepest blue                      */
+
+  /* ---- Lines & hairlines ------------------------------- */
+  --tyg-line:        #f3f3f3;                    /* tag / input border (solid light) */
+  --tyg-line-soft:   rgba(243, 243, 243, 0.14);  /* subtle dividers on dark          */
+  --tyg-line-faint:  rgba(243, 243, 243, 0.07);  /* whisper rule                     */
+
+  /* ---- Semantic aliases -------------------------------- */
+  --tyg-bg:             var(--tyg-ink-800);
+  --tyg-bg-deep:        var(--tyg-ink-850);
+  --tyg-bg-void:        var(--tyg-ink-900);
+  --tyg-surface:        var(--tyg-ink-800);
+  --tyg-surface-raised: var(--tyg-ink-700);
+  --tyg-surface-sunken: var(--tyg-ink-850);
+
+  --tyg-text:        var(--tyg-fg);
+  --tyg-text-muted:  var(--tyg-fg-muted);
+  --tyg-text-dim:    var(--tyg-fg-dim);
+  --tyg-heading:     var(--tyg-fg-title);
+
+  --tyg-link:        var(--tyg-fg);
+  --tyg-link-hover:  var(--tyg-accent);
+
+  --tyg-border:      var(--tyg-line);
+  --tyg-border-soft: var(--tyg-line-soft);
+  --tyg-divider:     var(--tyg-line-faint);
+
+  --tyg-focus:       var(--tyg-accent);
+
+  /* type selection mirrors the site: light bg, black text */
+  --tyg-selection-bg: var(--tyg-fg);
+  --tyg-selection-fg: var(--tyg-black);
+}
+
+::selection { background-color: var(--tyg-selection-bg); color: var(--tyg-selection-fg); }

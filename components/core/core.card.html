@@ -1,0 +1,72 @@
+<!-- @dsCard group="Components" viewport="700x500" name="Core — Button · Tag · Badge · Date · Eyebrow" subtitle="The primitive set on the void" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../../styles.css">
+<style>
+  body { margin: 0; background: var(--tyg-bg); padding: 28px 30px; }
+  .sec { margin-bottom: 26px; }
+  .cap { font-family: var(--tyg-font-mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--tyg-fg-faint); margin-bottom: 12px; }
+  .rowf { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+</style>
+</head>
+<body>
+  <div id="root"></div>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script src="../../_ds_bundle.js"></script>
+  <script type="text/babel">
+    const { Button, Tag, TagRow, Badge, DateCode, Eyebrow, Divider } = window.TanYangguDesignSystem_bf6778;
+    function Demo() {
+      return (
+        <div>
+          <div className="sec">
+            <div className="cap">Button — outline · solid · ghost</div>
+            <div className="rowf">
+              <Button variant="outline">View work</Button>
+              <Button variant="solid">Get in touch</Button>
+              <Button variant="ghost">Back</Button>
+              <Button variant="outline" size="sm">Small</Button>
+              <Button variant="outline" disabled>Disabled</Button>
+            </div>
+          </div>
+          <div className="sec">
+            <div className="cap">Tag — terminal token · hover for accent</div>
+            <TagRow>
+              <Tag href="#">UnrealEngine</Tag>
+              <Tag href="#">TouchDesigner</Tag>
+              <Tag href="#">AfterEffects</Tag>
+              <Tag href="#">AI</Tag>
+              <Tag active>VJ</Tag>
+            </TagRow>
+            <div className="rowf" style={{ marginTop: 12 }}>
+              <Tag variant="bracket" href="#">LiDAR</Tag>
+              <Tag variant="angle" href="#">Unity</Tag>
+              <Tag variant="outline" href="#">Installation</Tag>
+              <Tag variant="outline" active>VR</Tag>
+            </div>
+          </div>
+          <div className="sec">
+            <div className="cap">Badge · DateCode</div>
+            <div className="rowf">
+              <Badge tone="soft">VR</Badge>
+              <Badge tone="line">Archive</Badge>
+              <Badge tone="accent">Now Showing</Badge>
+              <Badge tone="invert">Award</Badge>
+              <DateCode tone="fg" size="16px">2025.12</DateCode>
+            </div>
+          </div>
+          <div className="sec" style={{marginBottom: 0}}>
+            <div className="cap">Eyebrow · Divider</div>
+            <Eyebrow>Selected Works</Eyebrow>
+            <Divider label="2024" align="left" />
+          </div>
+        </div>
+      );
+    }
+    ReactDOM.createRoot(document.getElementById('root')).render(<Demo />);
+  </script>
+</body>
+</html>

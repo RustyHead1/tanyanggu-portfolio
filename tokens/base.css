@@ -1,0 +1,99 @@
+/* ============================================================
+   Tan Yanggu — Base element layer
+   Sensible defaults so bare HTML already feels like the site:
+   the void background, off-white Space Grotesk body, blue-on-hover
+   links, and JetBrains Mono on code. Component classes live in
+   their own files.
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  margin: 0;
+  background-color: var(--tyg-bg);
+  color: var(--tyg-text);
+  font-family: var(--tyg-font-sans);
+  font-weight: var(--tyg-body-weight);
+  font-size: var(--tyg-text-base);
+  line-height: var(--tyg-leading-body);
+}
+
+/* ---- Headings: Space Grotesk, medium + tight tracking ---- */
+h1, h2, h3, h4, h5, h6 {
+  margin: 0 0 0.6em;
+  font-family: var(--tyg-font-display);
+  color: var(--tyg-heading);
+  font-weight: var(--tyg-heading-weight);
+  line-height: var(--tyg-leading-snug);
+  letter-spacing: var(--tyg-tracking-tight);
+}
+h1 { font-size: var(--tyg-text-4xl); font-weight: var(--tyg-display-weight); line-height: var(--tyg-leading-heading); }
+h2 { font-size: var(--tyg-text-3xl); }
+h3 { font-size: var(--tyg-text-2xl); }
+h4 { font-size: var(--tyg-text-lg);  line-height: var(--tyg-leading-tight); }
+h5 { font-size: var(--tyg-text-md);  line-height: var(--tyg-leading-tight); }
+h6 { font-size: var(--tyg-text-base);line-height: var(--tyg-leading-tight); }
+
+p { margin: 0 0 1em; }
+
+/* ---- CJK: coding-grade kana + kanji (M PLUS 1 Code), same
+   terminal temperature as the Latin mono. Never letter-tightened. */
+:lang(ja), :lang(zh) {
+  font-family: var(--tyg-font-cjk);
+  letter-spacing: var(--tyg-tracking-cjk);
+}
+:lang(ja) h1, :lang(ja) h2, :lang(ja) h3,
+:lang(zh) h1, :lang(zh) h2, :lang(zh) h3 {
+  letter-spacing: var(--tyg-tracking-cjk);
+}
+
+/* ---- Code: JetBrains Mono, the geek signal --------------- */
+code, kbd, samp, pre {
+  font-family: var(--tyg-font-mono);
+  font-size: 0.9em;
+  letter-spacing: var(--tyg-tracking-mono);
+}
+pre {
+  line-height: var(--tyg-leading-mono);
+  overflow: auto;
+}
+
+/* ---- Links: rest off-white, hover electric blue ---------- */
+a {
+  color: var(--tyg-link);
+  text-decoration: none;
+  transition: color var(--tyg-dur-fast) var(--tyg-ease);
+}
+a:hover, a:focus { color: var(--tyg-link-hover); }
+
+/* ---- Quotes & muted ----------------------------------- */
+blockquote { color: var(--tyg-fg-muted); margin: 1.5em; }
+small { font-size: var(--tyg-text-xs); color: var(--tyg-fg-dim); }
+hr { border: 0; border-top: 1px solid var(--tyg-divider); margin: var(--tyg-space-6) 0; }
+
+/* ---- Media defaults ----------------------------------- */
+img { max-width: 100%; height: auto; display: block; }
+
+/* ---- Focus ring --------------------------------------- */
+:focus-visible {
+  outline: 2px dotted var(--tyg-focus);
+  outline-offset: 2px;
+}
+
+/* ---- Selection (also set in colors.css) --------------- */
+::selection { background-color: var(--tyg-selection-bg); color: var(--tyg-selection-fg); }
+
+/* ---- Reduced-motion safety ---------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}

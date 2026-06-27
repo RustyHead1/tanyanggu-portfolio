@@ -1,0 +1,26 @@
+<!-- @dsCard group="Colors" viewport="700x180" name="Foreground — off-white type" subtitle="Every word sits in off-white; greys carry meta" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; background: var(--tyg-bg); padding: 24px; }
+  .row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+  .sw { }
+  .chip { height: 64px; border-radius: var(--tyg-radius); border: 1px solid var(--tyg-line-soft); display:flex; align-items:center; justify-content:center; font-family: var(--tyg-font-sans); font-size: 20px; }
+  .lbl { padding: 8px 2px 0; font-family: var(--tyg-font-sans); font-size: 11px; }
+  .lbl .n { color: var(--tyg-fg); display: block; letter-spacing: .04em; }
+  .lbl .h { color: var(--tyg-fg-dim); font-family: var(--tyg-font-mono); font-size: 10px; }
+</style>
+</head>
+<body>
+  <div class="row">
+    <div class="sw"><div class="chip" style="background:#ffffff;color:#0f0f10">Aa</div><div class="lbl"><span class="n">white</span><span class="h">#ffffff</span></div></div>
+    <div class="sw"><div class="chip" style="background:#0f0f10;color:#f3f3f3">Aa</div><div class="lbl"><span class="n">fg ★</span><span class="h">#f3f3f3</span></div></div>
+    <div class="sw"><div class="chip" style="background:#0f0f10;color:#f2f2f2">Aa</div><div class="lbl"><span class="n">fg-title</span><span class="h">#f2f2f2</span></div></div>
+    <div class="sw"><div class="chip" style="background:#0f0f10;color:#a8a8a8">Aa</div><div class="lbl"><span class="n">fg-muted</span><span class="h">#a8a8a8</span></div></div>
+    <div class="sw"><div class="chip" style="background:#0f0f10;color:#9ca3af">Aa</div><div class="lbl"><span class="n">fg-dim</span><span class="h">#9ca3af</span></div></div>
+  </div>
+</body>
+</html>

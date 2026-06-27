@@ -1,0 +1,35 @@
+<!-- @dsCard group="Brand" viewport="700x210" name="Tag — the signature atom" subtitle="Bordered capsule, inverts to light fill on hover" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; background: var(--tyg-bg); padding: 28px 30px; font-family: var(--tyg-font-sans); }
+  .label { font-size: 11px; text-transform: uppercase; letter-spacing: .14em; color: var(--tyg-fg-faint); margin-bottom: 14px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag {
+    display: inline-block; padding: 5px 9px; font-size: 14px; line-height: 1;
+    color: var(--tyg-fg); border: 1px solid #f0f0f0; border-radius: 4px;
+    transition: background-color .2s ease, color .2s ease; cursor: default;
+  }
+  .tag.is-hover { background: #f0f0f0; color: #000; }
+  .note { margin-top: 18px; color: var(--tyg-fg-dim); font-size: 12px; }
+  .note b { color: var(--tyg-fg); font-weight: 500; }
+</style>
+</head>
+<body>
+  <div class="label">Resting → hover (rightmost shows inverted state)</div>
+  <div class="tags">
+    <span class="tag">UnrealEngine</span>
+    <span class="tag">TouchDesigner</span>
+    <span class="tag">AfterEffects</span>
+    <span class="tag">AI</span>
+    <span class="tag">VJ</span>
+    <span class="tag">Interactive Installation</span>
+    <span class="tag">LiDAR</span>
+    <span class="tag is-hover">Personal</span>
+  </div>
+  <div class="note"><b>1px solid #f0f0f0 · 5px padding · 4px radius.</b> Off-white text inverts to a light fill with black text on hover.</div>
+</body>
+</html>

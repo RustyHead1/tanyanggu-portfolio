@@ -1,0 +1,30 @@
+<!-- @dsCard group="Colors" viewport="700x240" name="Ink — the void scale" subtitle="Near-black canvas; page & cards share #0f0f10" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; background: var(--tyg-bg); padding: 24px; }
+  .row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .sw { border-radius: var(--tyg-radius-md); overflow: hidden; border: 1px solid var(--tyg-line-soft); }
+  .chip { height: 76px; }
+  .lbl { padding: 8px 10px; font-family: var(--tyg-font-sans); font-size: 11px; line-height: 1.5; }
+  .lbl .n { color: var(--tyg-fg); display: block; letter-spacing: .04em; }
+  .lbl .h { color: var(--tyg-fg-dim); font-family: var(--tyg-font-mono); font-size: 10px; }
+  .lbl .u { color: var(--tyg-fg-faint); display: block; margin-top: 2px; }
+</style>
+</head>
+<body>
+  <div class="row">
+    <div class="sw"><div class="chip" style="background:#000000"></div><div class="lbl"><span class="n">black</span><span class="h">#000000</span><span class="u">true black</span></div></div>
+    <div class="sw"><div class="chip" style="background:#0a0a0b"></div><div class="lbl"><span class="n">ink-900</span><span class="h">#0a0a0b</span><span class="u">media void</span></div></div>
+    <div class="sw"><div class="chip" style="background:#100f0f"></div><div class="lbl"><span class="n">ink-850</span><span class="h">#100f0f</span><span class="u">footer / sunken</span></div></div>
+    <div class="sw"><div class="chip" style="background:#0f0f10;outline:1px solid var(--tyg-line-soft);outline-offset:-1px"></div><div class="lbl"><span class="n">ink-800 ★</span><span class="h">#0f0f10</span><span class="u">page + cards</span></div></div>
+    <div class="sw"><div class="chip" style="background:#18181a"></div><div class="lbl"><span class="n">ink-700</span><span class="h">#18181a</span><span class="u">raised / menus</span></div></div>
+    <div class="sw"><div class="chip" style="background:#1d1d1d"></div><div class="lbl"><span class="n">ink-600</span><span class="h">#1d1d1d</span><span class="u">control chip</span></div></div>
+    <div class="sw"><div class="chip" style="background:#2a2a2d"></div><div class="lbl"><span class="n">ink-500</span><span class="h">#2a2a2d</span><span class="u">hairline / well</span></div></div>
+    <div class="sw"><div class="chip" style="background:#3a3a3a"></div><div class="lbl"><span class="n">ink-400</span><span class="h">#3a3a3a</span><span class="u">disabled / rule</span></div></div>
+  </div>
+</body>
+</html>
