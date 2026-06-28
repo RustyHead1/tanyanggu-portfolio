@@ -773,11 +773,16 @@
                 <span style={{ display: 'block' }}>Tan</span>
                 <span style={{ display: 'block' }}>Yanggu</span>
               </h1>
-              {/* RustyHead — subtitle, directly beneath the title */}
-              <div className="tyg-intro" style={{ '--iy': '30px', animationDelay: '0.42s', position: 'relative', marginTop: 24, display: 'flex', alignItems: 'center', gap: 16, color: 'var(--tyg-fg)' }}>
-                <span style={{ width: 44, height: 1, background: 'var(--tyg-line-strong, var(--tyg-fg-dim))' }} />
-                <span className="tyg-hero-sub" style={{ fontSize: 'var(--tyg-text-2xl)', letterSpacing: 'var(--tyg-tracking-wide)', textTransform: 'uppercase', fontWeight: 'var(--tyg-w-regular)' }}>RustyHead</span>
-                <span style={{ width: 44, height: 1, background: 'var(--tyg-line-strong, var(--tyg-fg-dim))' }} />
+              {/* RustyHead — subtitle, directly beneath the title. On phones the
+                  title box is a fixed (narrow) grid cell, so the two flanking
+                  rules FLEX to fill whatever space is left beside the text rather
+                  than staying a fixed 44px each — otherwise the trailing rule
+                  spills past the frosted box's right edge. Desktop keeps the
+                  fixed-width rules (auto-width row, plenty of room). */}
+              <div className="tyg-intro" style={{ '--iy': '30px', animationDelay: '0.42s', position: 'relative', marginTop: 24, display: 'flex', alignItems: 'center', gap: isMobile ? 10 : 16, color: 'var(--tyg-fg)', width: isMobile ? '100%' : undefined, maxWidth: '100%', boxSizing: 'border-box' }}>
+                <span style={{ height: 1, background: 'var(--tyg-line-strong, var(--tyg-fg-dim))', flex: isMobile ? '1 1 0%' : '0 0 44px', minWidth: 0 }} />
+                <span className="tyg-hero-sub" style={{ flex: '0 0 auto', whiteSpace: 'nowrap', fontSize: 'var(--tyg-text-2xl)', letterSpacing: 'var(--tyg-tracking-wide)', textTransform: 'uppercase', fontWeight: 'var(--tyg-w-regular)' }}>RustyHead</span>
+                <span style={{ height: 1, background: 'var(--tyg-line-strong, var(--tyg-fg-dim))', flex: isMobile ? '1 1 0%' : '0 0 44px', minWidth: 0 }} />
               </div>
             </GridSnapTitle>
             {/* Meta strip — role headline, then fields (left) and location (right)
