@@ -749,6 +749,10 @@ function NavBar({
   style,
   ...rest
 }) {
+  // Mobile drawer state — collapses the inline nav into a hamburger below
+  // the `--tyg-nav-bp` breakpoint (see .tyg-nav-* rules in the page CSS).
+  const [open, setOpen] = React.useState(false);
+  const close = () => setOpen(false);
   return /*#__PURE__*/React.createElement("header", _extends({
     style: {
       position: sticky ? 'sticky' : 'static',
@@ -787,6 +791,7 @@ function NavBar({
       color: 'var(--tyg-fg-title)'
     }
   }, brandSuffix)), /*#__PURE__*/React.createElement("nav", {
+    className: 'tyg-nav-desktop',
     style: {
       display: 'flex',
       alignItems: 'center',
@@ -797,7 +802,75 @@ function NavBar({
   }, l))), /*#__PURE__*/React.createElement(__ds_scope.LangSwitch, {
     value: lang,
     onChange: onLangChange
-  }))));
+  })), /*#__PURE__*/React.createElement("button", {
+    className: 'tyg-nav-burger',
+    type: 'button',
+    'aria-label': open ? 'Close menu' : 'Open menu',
+    'aria-expanded': open,
+    onClick: () => setOpen(o => !o),
+    style: {
+      display: 'none',
+      alignItems: 'center',
+      justifyContent: 'center',
+      appearance: 'none',
+      background: 'none',
+      border: 0,
+      padding: 8,
+      margin: -8,
+      cursor: 'pointer',
+      color: 'var(--tyg-fg)'
+    }
+  }, /*#__PURE__*/React.createElement("svg", {
+    width: 26,
+    height: 26,
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 1.5,
+    strokeLinecap: "round"
+  }, open ? /*#__PURE__*/React.createElement("path", {
+    d: "M5 5l14 14M19 5L5 19"
+  }) : /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("path", {
+    d: "M3 6h18"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M3 12h18"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M3 18h18"
+  }))))), /*#__PURE__*/React.createElement("div", {
+    className: 'tyg-nav-drawer' + (open ? ' open' : ''),
+    style: {
+      display: 'none',
+      background: 'var(--tyg-bg)',
+      borderTop: '1px solid var(--tyg-line-soft)'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: '4px clamp(20px, 5vw, 72px) 22px',
+      display: 'flex',
+      flexDirection: 'column'
+    }
+  }, links.map((l, i) => /*#__PURE__*/React.createElement("a", {
+    key: i,
+    href: l.href,
+    onClick: close,
+    style: {
+      display: 'block',
+      padding: '15px 2px',
+      fontFamily: 'var(--tyg-font-sans)',
+      fontSize: 'var(--tyg-text-md)',
+      letterSpacing: 'var(--tyg-tracking-wide)',
+      textTransform: 'uppercase',
+      color: l.current ? 'var(--tyg-fg)' : 'var(--tyg-fg-dim)',
+      borderBottom: '1px solid var(--tyg-line-faint)'
+    }
+  }, l.label)), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginTop: 18
+    }
+  }, /*#__PURE__*/React.createElement(__ds_scope.LangSwitch, {
+    value: lang,
+    onChange: onLangChange
+  })))));
 }
 Object.assign(__ds_scope, { NavBar });
 })(); } catch (e) { __ds_ns.__errors.push({ path: "components/navigation/NavBar.jsx", error: String((e && e.message) || e) }); }

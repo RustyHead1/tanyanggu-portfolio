@@ -63,7 +63,7 @@
             hero-specific `heroPosition` to the grid's `imagePosition` to center.
             The hero is 21:9 (wider/shorter than the 16:9 grid card), so it may
             need its own value. Vertical 0% = top, 50% = center, 100% = bottom. */}
-        <div style={{ width: '100%', background: 'var(--tyg-ink-900)', aspectRatio: '21 / 9', overflow: 'hidden' }}>
+        <div className="tyg-proj-hero" style={{ width: '100%', background: 'var(--tyg-ink-900)', aspectRatio: '21 / 9', overflow: 'hidden' }}>
           <img src={window.__IMG(work.image)} alt={t.title}
                style={{ width: '100%', height: '100%', objectFit: 'cover',
                         objectPosition: work.heroPosition || work.imagePosition || 'center', display: 'block' }} />

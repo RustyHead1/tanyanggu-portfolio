@@ -53,6 +53,10 @@ export function NavBar({
   style,
   ...rest
 }) {
+  // Mobile drawer state — collapses the inline nav into a hamburger below
+  // the nav breakpoint (see the .tyg-nav-* rules in the consuming page CSS).
+  const [open, setOpen] = React.useState(false);
+  const close = () => setOpen(false);
   return (
     <header
       style={{
@@ -79,10 +83,50 @@ export function NavBar({
           {brandSuffix && <span style={{ color: 'var(--tyg-fg-title)' }}>{brandSuffix}</span>}
         </a>
 
-        <nav style={{ display: 'flex', alignItems: 'center', gap: 'var(--tyg-space-6)' }}>
+        {/* Desktop inline nav — hidden below the nav breakpoint */}
+        <nav className="tyg-nav-desktop" style={{ display: 'flex', alignItems: 'center', gap: 'var(--tyg-space-6)' }}>
           {links.map((l, i) => <NavLink key={i} {...l} />)}
           <LangSwitch value={lang} onChange={onLangChange} />
         </nav>
+
+        {/* Mobile hamburger — shown only below the nav breakpoint */}
+        <button
+          className="tyg-nav-burger"
+          type="button"
+          aria-label={open ? 'Close menu' : 'Open menu'}
+          aria-expanded={open}
+          onClick={() => setOpen((o) => !o)}
+          style={{
+            display: 'none', alignItems: 'center', justifyContent: 'center',
+            appearance: 'none', background: 'none', border: 0, padding: 8, margin: -8,
+            cursor: 'pointer', color: 'var(--tyg-fg)',
+          }}
+        >
+          <svg width={26} height={26} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round">
+            {open
+              ? <path d="M5 5l14 14M19 5L5 19" />
+              : <><path d="M3 6h18" /><path d="M3 12h18" /><path d="M3 18h18" /></>}
+          </svg>
+        </button>
+      </div>
+
+      {/* Mobile drawer — stacked links + LangSwitch, opened from the hamburger */}
+      <div className={'tyg-nav-drawer' + (open ? ' open' : '')}
+        style={{ display: 'none', background: 'var(--tyg-bg)', borderTop: '1px solid var(--tyg-line-soft)' }}>
+        <div style={{ padding: '4px clamp(20px, 5vw, 72px) 22px', display: 'flex', flexDirection: 'column' }}>
+          {links.map((l, i) => (
+            <a key={i} href={l.href} onClick={close} style={{
+              display: 'block', padding: '15px 2px',
+              fontFamily: 'var(--tyg-font-sans)', fontSize: 'var(--tyg-text-md)',
+              letterSpacing: 'var(--tyg-tracking-wide)', textTransform: 'uppercase',
+              color: l.current ? 'var(--tyg-fg)' : 'var(--tyg-fg-dim)',
+              borderBottom: '1px solid var(--tyg-line-faint)',
+            }}>{l.label}</a>
+          ))}
+          <div style={{ marginTop: 18 }}>
+            <LangSwitch value={lang} onChange={onLangChange} />
+          </div>
+        </div>
       </div>
     </header>
   );

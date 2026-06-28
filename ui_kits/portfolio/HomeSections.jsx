@@ -292,13 +292,13 @@
         marginTop: 'var(--tyg-space-6)', overflow: 'hidden', touchAction: 'pan-y' }}>
 
         {/* left overlay — big counter + nav buttons, over a gradient fade */}
-        <div style={{ position: 'absolute', inset: '0 auto 0 0', zIndex: 3, width: 'clamp(230px, 32vw, 400px)',
+        <div className="tyg-ws-left" style={{ position: 'absolute', inset: '0 auto 0 0', zIndex: 3, width: 'clamp(230px, 32vw, 400px)',
           display: 'flex', alignItems: 'center', paddingLeft: 'clamp(0px, 1.6vw, 24px)',
           background: 'linear-gradient(90deg, var(--tyg-bg) 64%, transparent)', pointerEvents: 'none' }}>
           <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
             height: '74%', pointerEvents: 'auto' }}>
             {/* counter */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.16em',
+            <div className="tyg-ws-counter" style={{ display: 'flex', alignItems: 'center', gap: '0.16em',
               fontFamily: 'var(--tyg-font-display)', fontWeight: 300,
               fontSize: 'clamp(32px, 4.4vw, 56px)', lineHeight: 1, color: 'var(--tyg-fg-title)' }}>
               <div data-ws="steps-col" style={{ height: '1em', overflow: 'hidden' }}></div>

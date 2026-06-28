@@ -60,7 +60,7 @@
               {lang === 'JA' ? 'オーディオビジュアル' : 'audiovisual performance'}
             </h1>
           </header>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '28px 28px' }}>
+          <div className="tyg-works-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '28px 28px' }}>
             {works.map((w, i) => (
               <FadeCard key={w.slug} index={i}>
                 <ProjectCard

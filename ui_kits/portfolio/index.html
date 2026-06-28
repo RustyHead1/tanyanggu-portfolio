@@ -147,6 +147,69 @@
     .tyg-home-section { justify-content: flex-start !important; }
   }
 
+  /* ════════════════════════════════════════════════════════════════════
+     Mobile adaptation — collapse the nav to a hamburger drawer, single-
+     column the grids, and right-size the works slider / hero for phones.
+     Inline styles are overridden with !important at the relevant widths.
+     ════════════════════════════════════════════════════════════════════ */
+
+  /* Nav — swap the inline links for a hamburger + slide-down drawer */
+  @media (max-width: 820px) {
+    .tyg-nav-desktop { display: none !important; }
+    .tyg-nav-burger  { display: flex !important; }
+    .tyg-nav-drawer  {
+      display: block !important;
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.34s var(--tyg-ease);
+    }
+    .tyg-nav-drawer.open { max-height: 80vh; }
+  }
+
+  /* Works page — two-up grid collapses to a single column */
+  @media (max-width: 680px) {
+    .tyg-works-grid { grid-template-columns: 1fr !important; }
+  }
+
+  /* Home — Selected Works slider: trim the oversized left counter so the
+     cards get room, and bring the slides to a phone-friendly size. */
+  @media (max-width: 680px) {
+    .tyg-ws-left    { width: 120px !important; padding-left: 2px !important; }
+    .tyg-ws-counter { font-size: 30px !important; }
+    /* keep an explicit height — the flex track has no fixed height, so a
+       percentage height would collapse the slide */
+    .tyg-ws-slide   {
+      width: 76vw !important; height: clamp(220px, 58vw, 280px) !important;
+      padding-left: 9px !important; padding-right: 9px !important;
+    }
+  }
+
+  /* Profile — shrink the portrait + label columns so the copy can breathe */
+  @media (max-width: 600px) {
+    .tyg-pf-head  { grid-template-columns: 124px 1fr !important; gap: 20px !important; }
+    .tyg-pf-skill { grid-template-columns: 104px 1fr !important; gap: 14px !important; }
+  }
+
+  /* Project detail — the 21:9 hero is a sliver on a phone; give it height */
+  @media (max-width: 680px) {
+    .tyg-proj-hero { aspect-ratio: 3 / 2 !important; }
+  }
+
+  /* Home hero — declutter for a tall, narrow screen: thin the blueprint
+     grid, shrink the title, keep the role line to one tidy row, drop the
+     year marker + scroll cue (scrolling is implicit on touch) so nothing
+     overlaps the meta strip. */
+  @media (max-width: 600px) {
+    .tyg-hero-h1    { font-size: clamp(44px, 13.5vw, 74px) !important; }
+    .tyg-hero-year  { display: none !important; }
+    .tyg-hero-title { bottom: 30% !important; }
+    /* the dense vertical column rules read as clutter at phone width */
+    .tyg-hero-gridfield .tyg-grow-v { display: none !important; }
+    /* quieter role line that no longer sprawls past the title block */
+    .tyg-hero-role  { font-size: 12px !important; letter-spacing: 0.06em !important; margin-bottom: 12px !important; }
+    .tyg-hero-scroll { display: none !important; }
+  }
+
   .tyg-footer {
     border-top: 1px solid var(--tyg-line-soft);
     background: var(--tyg-bg-deep);

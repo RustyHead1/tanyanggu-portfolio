@@ -299,7 +299,7 @@
   // ── Technical / blueprint overlay primitives ──────────────────────────
   function GridField({ opacity }) {
     return (
-      <div style={{ position: 'absolute', inset: 22, zIndex: 6, pointerEvents: 'none', opacity, overflow: 'hidden' }}>
+      <div className="tyg-hero-gridfield" style={{ position: 'absolute', inset: 22, zIndex: 6, pointerEvents: 'none', opacity, overflow: 'hidden' }}>
         {/* vertical column lines */}
         {Array.from({ length: GRID.cols - 1 }).map((_, i) => (
           <span key={'v' + i} className="tyg-grow-v" style={{ position: 'absolute', top: 0, bottom: 0, left: gx(i + 1) + '%', width: 2, marginLeft: -1, background: 'rgba(243,243,243,0.18)', '--gd': (i * 0.05) + 's' }} />
@@ -380,7 +380,7 @@
   // exactly on a construction-grid line — at any resolution / zoom / DPR.
   // Lives in the inset-22 box so its % coords share the GridField's basis.
   // Re-measures on resize, font load and text reflow.
-  function GridSnapTitle({ f, blur, boxStyle, contentStyle, pad = 12, children }) {
+  function GridSnapTitle({ f, blur, boxStyle, contentStyle, contentClass, pad = 12, children }) {
     const boxRef = React.useRef(null);
     const contentRef = React.useRef(null);
     const [rect, setRect] = React.useState(null);
@@ -432,7 +432,7 @@
             <div style={{ ...fill, pointerEvents: 'none' }}><TitleConstruction inset={0} /></div>
           </React.Fragment>
         )}
-        <div ref={contentRef} style={{ pointerEvents: 'auto', ...contentStyle }}>{children}</div>
+        <div ref={contentRef} className={contentClass} style={{ pointerEvents: 'auto', ...contentStyle }}>{children}</div>
       </div>
     );
   }
@@ -646,9 +646,9 @@
         const edge = 'clamp(14px, 6vw, 62px)';
         return (
           <React.Fragment>
-            <GridSnapTitle key="t3" f={f} blur={titleBlurNow} pad={14}
+            <GridSnapTitle key="t3" f={f} blur={titleBlurNow} pad={14} contentClass="tyg-hero-title"
               contentStyle={{ position: 'absolute', left: edge, bottom: '24%', textAlign: 'left' }}>
-              <h1 className="tyg-intro" style={{ '--iy': '46px', animationDelay: '0.28s', position: 'relative', margin: 0, fontFamily: 'var(--tyg-font-display)', fontWeight: 'var(--tyg-w-light)', color: 'var(--tyg-fg-title)', lineHeight: 0.82, letterSpacing: '0.01em', fontSize: 'clamp(64px, 13vw, 200px)', textTransform: 'uppercase' }}>
+              <h1 className="tyg-intro tyg-hero-h1" style={{ '--iy': '46px', animationDelay: '0.28s', position: 'relative', margin: 0, fontFamily: 'var(--tyg-font-display)', fontWeight: 'var(--tyg-w-light)', color: 'var(--tyg-fg-title)', lineHeight: 0.82, letterSpacing: '0.01em', fontSize: 'clamp(64px, 13vw, 200px)', textTransform: 'uppercase' }}>
                 <span style={{ display: 'block' }}>Tan</span>
                 <span style={{ display: 'block' }}>Yanggu</span>
               </h1>
@@ -663,7 +663,7 @@
                 along the lower row line, with RustyHead now lifted into the title. */}
             <div style={{ position: 'absolute', inset: 22, zIndex: 8, pointerEvents: 'none' }}>
               <div className="tyg-intro" style={{ '--iy': '24px', animationDelay: '0.54s', position: 'absolute', left: edge, right: edge, bottom: '7%', pointerEvents: 'auto', paddingTop: 22 }}>
-                <div style={{ fontSize: 'var(--tyg-text-md)', letterSpacing: 'var(--tyg-tracking-wide)', textTransform: 'uppercase', color: 'var(--tyg-fg-muted)', marginBottom: 16 }}>Visual Artist&nbsp;&nbsp;/&nbsp;&nbsp;Interactive Engineer</div>
+                <div className="tyg-hero-role" style={{ fontSize: 'var(--tyg-text-md)', letterSpacing: 'var(--tyg-tracking-wide)', textTransform: 'uppercase', color: 'var(--tyg-fg-muted)', marginBottom: 16 }}>Visual Artist&nbsp;&nbsp;/&nbsp;&nbsp;Interactive Engineer</div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', justifyContent: 'space-between', gap: '12px 40px' }}>
                   {fieldRow({})}
                   <span style={{ fontFamily: 'var(--tyg-font-mono)', fontSize: 'var(--tyg-text-xs)', letterSpacing: '0.14em', color: 'var(--tyg-fg-dim)' }}>Based in Tokyo, JP</span>
@@ -792,7 +792,7 @@
 
         {/* Big editorial index — outlined year marker, top-left (layout 01 only) */}
         {layout === 1 && (
-        <div className="tyg-intro" style={{ '--iy': '22px', animationDelay: '0.12s', position: 'absolute', top: 'clamp(72px, 9vh, 100px)', left: 'clamp(28px, 5.5vw, 80px)', zIndex: 9 }}>
+        <div className="tyg-intro tyg-hero-year" style={{ '--iy': '22px', animationDelay: '0.12s', position: 'absolute', top: 'clamp(72px, 9vh, 100px)', left: 'clamp(28px, 5.5vw, 80px)', zIndex: 9 }}>
           <div style={{ fontFamily: 'var(--tyg-font-display)', fontWeight: 'var(--tyg-w-light)', fontSize: 'clamp(52px, 8.5vw, 120px)',
             lineHeight: 0.86, letterSpacing: '0.02em', color: 'transparent', WebkitTextStroke: '1px var(--tyg-line-soft)' }}>2026</div>
           <div style={{ marginTop: 10, fontFamily: 'var(--tyg-font-mono)', fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--tyg-fg-faint)' }}>Portfolio · Ed.</div>
@@ -801,7 +801,7 @@
 
         {/* Same outlined year marker, top-left for layout 03 */}
         {layout === 3 && (
-        <div className="tyg-intro" style={{ '--iy': '22px', animationDelay: '0.12s', position: 'absolute', top: 'clamp(72px, 9vh, 100px)', left: 'clamp(28px, 5.5vw, 80px)', zIndex: 9 }}>
+        <div className="tyg-intro tyg-hero-year" style={{ '--iy': '22px', animationDelay: '0.12s', position: 'absolute', top: 'clamp(72px, 9vh, 100px)', left: 'clamp(28px, 5.5vw, 80px)', zIndex: 9 }}>
           <div style={{ fontFamily: 'var(--tyg-font-display)', fontWeight: 'var(--tyg-w-light)', fontSize: 'clamp(52px, 8.5vw, 120px)',
             lineHeight: 0.86, letterSpacing: '0.02em', color: 'transparent', WebkitTextStroke: '1px var(--tyg-line-soft)' }}>2026</div>
           <div style={{ marginTop: 10, fontFamily: 'var(--tyg-font-mono)', fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--tyg-fg-faint)' }}>Portfolio · Ed.</div>
@@ -815,7 +815,7 @@
 
         {/* Scroll cue — invites the works / about sections below the fold */}
         <a href="#works-cue" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: window.innerHeight, behavior: 'smooth' }); }}
-          aria-label="Scroll" className="tyg-intro-cx"
+          aria-label="Scroll" className="tyg-intro-cx tyg-hero-scroll"
           style={{ '--iy': '16px', animationDelay: '0.72s', position: 'absolute', left: '50%', bottom: 70, transform: 'translateX(-50%)', zIndex: 11,
             display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, cursor: 'pointer',
             fontFamily: 'var(--tyg-font-mono)', fontSize: 17, letterSpacing: '0.34em', textTransform: 'uppercase',

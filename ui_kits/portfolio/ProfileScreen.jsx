@@ -110,7 +110,7 @@
           ]}
         />
         <main style={{ maxWidth: 'var(--tyg-container-narrow)', margin: '0 auto', padding: '48px clamp(20px, 5vw, 72px) 96px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '180px 1fr', gap: 32, alignItems: 'start', marginBottom: 'var(--tyg-space-7)' }}>
+          <div className="tyg-pf-head" style={{ display: 'grid', gridTemplateColumns: '180px 1fr', gap: 32, alignItems: 'start', marginBottom: 'var(--tyg-space-7)' }}>
             <div className="tyg-pf-rise" style={{ '--d': '0s', borderRadius: 'var(--tyg-radius-md)', overflow: 'hidden', aspectRatio: '3 / 4', background: 'var(--tyg-ink-900)' }}>
               <img src={window.__IMG(p.portrait)} alt={p.nameEn} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
             </div>
@@ -145,7 +145,7 @@
               return (
                 <div key={i}>
                   <Line d={d} />
-                  <div className="tyg-pf-rise" style={{ '--d': d + 's', display: 'grid', gridTemplateColumns: '170px 1fr', gap: 20, padding: '10px 0' }}>
+                  <div className="tyg-pf-rise tyg-pf-skill" style={{ '--d': d + 's', display: 'grid', gridTemplateColumns: '170px 1fr', gap: 20, padding: '10px 0' }}>
                     <span style={{ color: 'var(--tyg-fg-dim)', fontSize: 'var(--tyg-text-sm)' }}>{s[0]}</span>
                     <span style={{ color: 'var(--tyg-fg)', fontSize: 'var(--tyg-text-base)' }}>{s[1]}</span>
                   </div>
