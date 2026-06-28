@@ -288,14 +288,14 @@
     );
 
     return (
-      <div ref={rootRef} style={{ position: 'relative', height: 'clamp(300px, 40vw, 520px)',
+      <div ref={rootRef} className="tyg-ws-root" style={{ position: 'relative', height: 'clamp(300px, 40vw, 520px)',
         marginTop: 'var(--tyg-space-6)', overflow: 'hidden', touchAction: 'pan-y' }}>
 
         {/* left overlay — big counter + nav buttons, over a gradient fade */}
         <div className="tyg-ws-left" style={{ position: 'absolute', inset: '0 auto 0 0', zIndex: 3, width: 'clamp(230px, 32vw, 400px)',
           display: 'flex', alignItems: 'center', paddingLeft: 'clamp(0px, 1.6vw, 24px)',
           background: 'linear-gradient(90deg, var(--tyg-bg) 64%, transparent)', pointerEvents: 'none' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
+          <div className="tyg-ws-ctrls" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
             height: '74%', pointerEvents: 'auto' }}>
             {/* counter */}
             <div className="tyg-ws-counter" style={{ display: 'flex', alignItems: 'center', gap: '0.16em',
@@ -317,7 +317,7 @@
 
         {/* the slider track */}
         <div style={{ position: 'absolute', inset: 0, overflow: 'hidden' }}>
-          <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
+          <div className="tyg-ws-trackrow" style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
             <div data-slider="list" style={{ display: 'flex', position: 'relative' }}>
               {works.map((w) => (
                 <div key={w.slug} data-slider="slide" data-href={'#/work/' + w.slug} className="tyg-ws-slide">

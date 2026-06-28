@@ -13,15 +13,19 @@
   const HERO_START_TIMES = [0, 6, 14, 24, 31];
 
   // ── Filter parameters ──────────────────────────────────────────────────
-  const FILTER_KEY = 'tyg-home-filter-v1';
+  // NOTE: bumped to v2 so a previously-saved v1 snapshot in localStorage can't
+  // override the new title-frost defaults below.
+  const FILTER_KEY = 'tyg-home-filter-v2';
   const DEFAULTS = {
     brightness: 0.82, contrast: 1.12, saturate: 0.92, blur: 0,
     grayscale: 0, hue: 0,
     grain: 0.14, scanlines: 0.19, scanGap: 3,
     vignette: 1.0, wash: 0.13,
     tint: '#11305a', tintStrength: 0.14, tintBlend: 'soft-light',
-    titleBlur: 40, frame: 0.68,
-    titleBgColor: '#0a0a0b', titleBgOpacity: 0.42,
+    // titleBlur = 标题方块磨砂模糊程度（px）。titleBgOpacity = 方块底色不透明度，
+    // 0 = 纯透明，只剩模糊。两者就是你要调的值。
+    titleBlur: 14, frame: 0.68,
+    titleBgColor: '#0a0a0b', titleBgOpacity: 0,
   };
   const TINTS = ['#11305a', '#3a1f4d', '#0a0a0b', '#5a3a11', '#1f4d3a'];
   const TITLE_BG_COLORS = ['#0a0a0b', '#0d1a2e', '#1a0d0d', '#0d1a10', '#1a1a0a'];
@@ -68,6 +72,49 @@
   const GRID_CROSS_FAINT = [
     { c: 1, r: 0.22 }, { c: 5, r: 0.62 }, { c: 8, r: 0.80 },
     { c: 4, r: 0.62 }, { c: 10, r: 0.42 }, { c: 2, r: 0.42 },
+  ];
+
+  // ── Mobile construction grid (≤600px) ─────────────────────────────────
+  // A FINER 6-column grid (5 interior rules) so the title's frosted box snaps
+  // to lines close to the text instead of rounding out to a giant cell. Still
+  // far sparser than the 12-column desktop grid. Blocks and crosshairs below
+  // are defined in THIS grid's coords, so block edges land on its lines and
+  // every crosshair sits dead-on a line intersection.
+  // Tune freely: c = column index 0..6, r = row fraction (use GRID_M.rows
+  // values + 0 and 1 so edges stay on lines). More cols/rows → tighter box.
+  // The big 0.30→0.55 band is where the title block sits.
+  const GRID_M = { cols: 6, rows: [0.10, 0.20, 0.30, 0.55, 0.65, 0.79] };
+
+  // ── Title block (main title + subtitle + their frosted box) ────────────
+  // The box is a FIXED grid cell, with the text centred vertically inside it
+  // and left-aligned. Three knobs:
+  //   TITLE_TOP_M = 顶边（落在某条 GRID_M.rows 线上）
+  //   TITLE_H_M   = 高度（顶+高=底边，也要落在某条线上）  ← 高度参数
+  //   c1          = 右边到第几列（c1:4 → 第 4 列为止）
+  const TITLE_TOP_M = 0.40;
+  const TITLE_H_M   = 0.25;
+  const TITLE_CELL_M = { c0: 0, c1: 4, y0: TITLE_TOP_M, y1: TITLE_TOP_M + TITLE_H_M };
+
+  // Background blocks — only these (the cells you circled) are FROSTED; any
+  // block can be turned into a plain outline by adding `blur: false`.
+  // (The title's own box keeps its blur regardless — it's separate.)
+  const GRID_BLOCKS_M = [
+    { c0: 0, c1: 1, y0: 0,    y1: 0.10 },   // top-left, by the year
+    { c0: 1, c1: 2, y0: 0,    y1: 0.10 },   // top
+    { c0: 5, c1: 6, y0: 0.10, y1: 0.20 },   // top-right
+    { c0: 5, c1: 6, y0: 0.20, y1: 0.30 },   // right
+    { c0: 0, c1: 1, y0: 0.20, y1: 0.30 },   // left
+    { c0: 0, c1: 4, y0: 0.79, y1: 1 },      // bottom — one merged box (cols 0→4, like the title box)
+  ];
+  // Crosshairs — re-fitted to sit on the current line intersections.
+  const GRID_CROSS_M = [
+    { c: 1, r: 0.30, d: '0s'   },
+    { c: 5, r: 0.30, d: '0.7s' },
+    { c: 5, r: 0.55, d: '0.3s' },
+    { c: 2, r: 0.65, d: '1.0s' },
+  ];
+  const GRID_CROSS_FAINT_M = [
+    { c: 4, r: 0.20 }, { c: 1, r: 0.79 },
   ];
 
   function loadFilter() {
@@ -134,6 +181,31 @@
   // overlay so it stays above the pinned hero and the rising sections.
   // Same component / style as every other page for consistency. ────────
   function HomeNav({ lang, setLang }) {
+    // On phones the bar is transparent (no divider) over the hero — page 1 —
+    // and turns opaque dark with its divider once the works section (page 2)
+    // has risen to cover the hero. Desktop keeps the always-transparent look.
+    const [solid, setSolid] = React.useState(false);
+    React.useEffect(() => {
+      const mq = window.matchMedia ? window.matchMedia('(max-width: 820px)') : null;
+      let raf = 0;
+      const onScroll = () => {
+        if (raf) return;
+        raf = requestAnimationFrame(() => {
+          raf = 0;
+          const mobile = mq ? mq.matches : false;
+          const past = window.scrollY > (window.innerHeight || 1) * 0.85;
+          setSolid(mobile && past);
+        });
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      if (mq) (mq.addEventListener ? mq.addEventListener('change', onScroll) : mq.addListener(onScroll));
+      onScroll();
+      return () => {
+        window.removeEventListener('scroll', onScroll);
+        if (mq) (mq.removeEventListener ? mq.removeEventListener('change', onScroll) : mq.removeListener(onScroll));
+        if (raf) cancelAnimationFrame(raf);
+      };
+    }, []);
     return (
       <NavBar
         lang={lang}
@@ -141,7 +213,15 @@
         brand=""
         brandSuffix=""
         fluid
-        style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 125, background: 'transparent', borderBottom: 'none' }}
+        style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 125,
+          background: solid ? 'var(--tyg-bg)' : 'transparent',
+          // keep a 1px border at all times and only fade its colour in — avoids
+          // the 1px layout shift a none→solid toggle would cause. The "off" state
+          // uses the line colour at zero alpha (NOT the `transparent` keyword,
+          // which is transparent BLACK) so the fade is a clean transparent→grey
+          // alpha ramp instead of passing through muddy black tones.
+          borderBottom: '1px solid ' + (solid ? 'var(--tyg-line-soft)' : 'rgba(243,243,243,0)'),
+          transition: 'background var(--tyg-dur) var(--tyg-ease), border-color var(--tyg-dur) var(--tyg-ease)' }}
         links={[
           { label: 'Home', href: '#/', current: true },
           { label: 'Works', href: '#/works' },
@@ -297,23 +377,23 @@
   }
 
   // ── Technical / blueprint overlay primitives ──────────────────────────
-  function GridField({ opacity }) {
+  function GridField({ opacity, grid = GRID, gx: gxp = gx, crosses = GRID_CROSS }) {
     return (
       <div className="tyg-hero-gridfield" style={{ position: 'absolute', inset: 22, zIndex: 6, pointerEvents: 'none', opacity, overflow: 'hidden' }}>
         {/* vertical column lines */}
-        {Array.from({ length: GRID.cols - 1 }).map((_, i) => (
-          <span key={'v' + i} className="tyg-grow-v" style={{ position: 'absolute', top: 0, bottom: 0, left: gx(i + 1) + '%', width: 2, marginLeft: -1, background: 'rgba(243,243,243,0.18)', '--gd': (i * 0.05) + 's' }} />
+        {Array.from({ length: grid.cols - 1 }).map((_, i) => (
+          <span key={'v' + i} className="tyg-grow-v" style={{ position: 'absolute', top: 0, bottom: 0, left: gxp(i + 1) + '%', width: 2, marginLeft: -1, background: 'rgba(243,243,243,0.18)', '--gd': (i * 0.05) + 's' }} />
         ))}
         {/* horizontal blueprint rules — the lowest (0.80) rule is omitted so no
             static rule crosses just above the bottom-center scroll cue. The row
-            stays in GRID.rows for block snapping / crosshair registration. */}
-        {GRID.rows.map((r, ri) => (
+            stays in the grid's rows for block snapping / crosshair registration. */}
+        {grid.rows.map((r, ri) => (
           r === 0.80 ? null :
           <span key={'h' + r} className="tyg-grow-h" style={{ position: 'absolute', left: 0, right: 0, top: gy(r) + '%', height: 2, marginTop: -1, background: 'rgba(243,243,243,0.18)', '--gd': (0.12 + ri * 0.08) + 's' }} />
         ))}
         {/* blinking crosshairs, dead-on the grid intersections */}
-        {GRID_CROSS.map(c => (
-          <span key={c.c + '-' + c.r} className="tyg-blink" style={{ position: 'absolute', left: gx(c.c) + '%', top: gy(c.r) + '%', width: 16, height: 16, transform: 'translate(-50%, -50%)', animationDelay: c.d }}>
+        {crosses.map(c => (
+          <span key={c.c + '-' + c.r} className="tyg-blink" style={{ position: 'absolute', left: gxp(c.c) + '%', top: gy(c.r) + '%', width: 16, height: 16, transform: 'translate(-50%, -50%)', animationDelay: c.d }}>
             <span style={{ position: 'absolute', left: '50%', top: 0, width: 2, height: '100%', marginLeft: -1, background: 'var(--tyg-fg-dim)' }} />
             <span style={{ position: 'absolute', top: '50%', left: 0, height: 2, width: '100%', marginTop: -1, background: 'var(--tyg-fg-dim)' }} />
           </span>
@@ -342,7 +422,7 @@
   // exact same box, then draws projection lines on the four edges (run far past
   // the viewport; the hero's overflow:hidden trims them) and corner crosshairs.
   // Pure CSS → resolution / zoom / DPR independent; hugs the block at any size.
-  function TitleConstruction({ inset }) {
+  function TitleConstruction({ inset, projection = true }) {
     const proj = 'rgba(243,243,243,0.3)';   // construction lines hugging the title block
     const vline = { position: 'absolute', top: '-200vh', height: '400vh', width: 1, background: proj };
     const hline = { position: 'absolute', left: '-200vw', width: '400vw', height: 1, background: proj };
@@ -357,11 +437,12 @@
     ];
     return (
       <div aria-hidden="true" style={{ position: 'absolute', inset, pointerEvents: 'none' }}>
-        {/* projection lines on the block's edges, extended across the field */}
-        <span style={{ ...vline, left: -1 }} />
-        <span style={{ ...vline, right: -1 }} />
-        <span style={{ ...hline, top: -1 }} />
-        <span style={{ ...hline, bottom: -1 }} />
+        {/* projection lines on the block's edges, extended across the field
+            (the long gray lines). Disabled when projection === false. */}
+        {projection && <span style={{ ...vline, left: -1 }} />}
+        {projection && <span style={{ ...vline, right: -1 }} />}
+        {projection && <span style={{ ...hline, top: -1 }} />}
+        {projection && <span style={{ ...hline, bottom: -1 }} />}
         {/* corner crosshairs */}
         {corners.map((c, i) => (
           <span key={i} className="tyg-blink" style={{ ...corner, left: c.left, top: c.top, animationDelay: c.d }}>
@@ -380,21 +461,32 @@
   // exactly on a construction-grid line — at any resolution / zoom / DPR.
   // Lives in the inset-22 box so its % coords share the GridField's basis.
   // Re-measures on resize, font load and text reflow.
-  function GridSnapTitle({ f, blur, boxStyle, contentStyle, contentClass, pad = 12, children }) {
+  function GridSnapTitle({ f, blur, boxStyle, contentStyle, contentClass, grid = GRID, pad = 12, fixedCell, children }) {
     const boxRef = React.useRef(null);
     const contentRef = React.useRef(null);
     const [rect, setRect] = React.useState(null);
 
     React.useLayoutEffect(() => {
+      // Fixed-cell mode (mobile): the box IS a grid cell, no measuring — the
+      // content is centred inside it instead of the box hugging the content.
+      if (fixedCell) {
+        setRect({
+          left: (fixedCell.c0 / grid.cols) * 100,
+          top: fixedCell.y0 * 100,
+          width: ((fixedCell.c1 - fixedCell.c0) / grid.cols) * 100,
+          height: (fixedCell.y1 - fixedCell.y0) * 100,
+        });
+        return;
+      }
       const box = boxRef.current, content = contentRef.current;
       if (!box || !content) return;
-      const rowLines = [0, ...GRID.rows, 1];
+      const rowLines = [0, ...grid.rows, 1];
       const floor = (a, v) => a.filter(x => x <= v + 0.5).reduce((p, x) => Math.max(p, x), a[0]);
       const ceil  = (a, v) => a.filter(x => x >= v - 0.5).reduce((p, x) => Math.min(p, x), a[a.length - 1]);
       const measure = () => {
         const bw = box.clientWidth, bh = box.clientHeight;
         if (!bw || !bh || !content.offsetWidth) return;
-        const xs = []; for (let i = 0; i <= GRID.cols; i++) xs.push((i / GRID.cols) * bw);
+        const xs = []; for (let i = 0; i <= grid.cols; i++) xs.push((i / grid.cols) * bw);
         const ys = rowLines.map(r => r * bh);
         const L = content.offsetLeft - pad, T = content.offsetTop - pad;
         const R = content.offsetLeft + content.offsetWidth + pad;
@@ -413,7 +505,7 @@
       window.addEventListener('resize', measure);
       if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure).catch(() => {});
       return () => { cancelAnimationFrame(raf); if (ro) ro.disconnect(); window.removeEventListener('resize', measure); };
-    }, [pad]);
+    }, [pad, grid, fixedCell]);
 
     const fill = rect && { position: 'absolute', left: rect.left + '%', top: rect.top + '%', width: rect.width + '%', height: rect.height + '%' };
     // While the frost is clearing on early scroll the blur eases to 0 (still a
@@ -422,6 +514,11 @@
     const blurPx = (blur == null ? f.titleBlur : blur);
     return (
       <div ref={boxRef} style={{ position: 'absolute', inset: 22, zIndex: 8, pointerEvents: 'none', ...boxStyle }}>
+        {/* Non-animated scale wrapper — lets one CSS knob (.tyg-hero-titlescale)
+            shrink the whole block (frost box + construction + text) as a unit.
+            The box is measured from the UN-scaled layout, so it keeps hugging
+            the text after scaling. */}
+        <div className="tyg-hero-titlescale" style={{ position: 'absolute', inset: 0, transformOrigin: 'left bottom' }}>
         {rect && (
           <React.Fragment>
             <div className="tyg-intro" style={{ ...fill, '--iy': '8px', animationDelay: '0.22s',
@@ -432,7 +529,13 @@
             <div style={{ ...fill, pointerEvents: 'none' }}><TitleConstruction inset={0} /></div>
           </React.Fragment>
         )}
-        <div ref={contentRef} className={contentClass} style={{ pointerEvents: 'auto', ...contentStyle }}>{children}</div>
+        <div ref={contentRef} className={contentClass} style={{ pointerEvents: 'auto',
+          ...((fixedCell && rect)
+            ? { position: 'absolute', left: rect.left + '%', top: rect.top + '%', width: rect.width + '%', height: rect.height + '%',
+                display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start',
+                paddingLeft: 'clamp(14px, 6vw, 34px)', paddingRight: 12, boxSizing: 'border-box' }
+            : contentStyle) }}>{children}</div>
+        </div>
       </div>
     );
   }
@@ -466,6 +569,22 @@
     const reset = () => setF({ ...DEFAULTS });
     const grain = React.useMemo(makeGrain, []);
 
+    // ── Active construction grid — coarse 4-col on phones, dense 12-col
+    // otherwise. Blocks + crosshairs are driven from the same chosen grid so
+    // they always register against the lines that are actually drawn. ──────
+    const [isMobile, setIsMobile] = React.useState(
+      () => typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(max-width: 600px)').matches);
+    React.useEffect(() => {
+      if (!window.matchMedia) return;
+      const mq = window.matchMedia('(max-width: 600px)');
+      const on = () => setIsMobile(mq.matches);
+      mq.addEventListener ? mq.addEventListener('change', on) : mq.addListener(on);
+      return () => { mq.removeEventListener ? mq.removeEventListener('change', on) : mq.removeListener(on); };
+    }, []);
+    const GEO = isMobile
+      ? { grid: GRID_M, blocks: GRID_BLOCKS_M, cross: GRID_CROSS_M, crossFaint: GRID_CROSS_FAINT_M }
+      : { grid: GRID,   blocks: GRID_BLOCKS,   cross: GRID_CROSS,   crossFaint: GRID_CROSS_FAINT };
+    const gX = i => (i / GEO.grid.cols) * 100;   // active column index → % x
 
     // ── Hero layout — locked to variant 03 (giant) ──────────────────────
     const layout = 3;
@@ -646,7 +765,9 @@
         const edge = 'clamp(14px, 6vw, 62px)';
         return (
           <React.Fragment>
-            <GridSnapTitle key="t3" f={f} blur={titleBlurNow} pad={14} contentClass="tyg-hero-title"
+            <GridSnapTitle key="t3" f={f} blur={titleBlurNow} pad={isMobile ? 8 : 14} grid={GEO.grid}
+              fixedCell={isMobile ? TITLE_CELL_M : undefined}
+              contentClass={isMobile ? undefined : 'tyg-hero-title'}
               contentStyle={{ position: 'absolute', left: edge, bottom: '24%', textAlign: 'left' }}>
               <h1 className="tyg-intro tyg-hero-h1" style={{ '--iy': '46px', animationDelay: '0.28s', position: 'relative', margin: 0, fontFamily: 'var(--tyg-font-display)', fontWeight: 'var(--tyg-w-light)', color: 'var(--tyg-fg-title)', lineHeight: 0.82, letterSpacing: '0.01em', fontSize: 'clamp(64px, 13vw, 200px)', textTransform: 'uppercase' }}>
                 <span style={{ display: 'block' }}>Tan</span>
@@ -655,13 +776,13 @@
               {/* RustyHead — subtitle, directly beneath the title */}
               <div className="tyg-intro" style={{ '--iy': '30px', animationDelay: '0.42s', position: 'relative', marginTop: 24, display: 'flex', alignItems: 'center', gap: 16, color: 'var(--tyg-fg)' }}>
                 <span style={{ width: 44, height: 1, background: 'var(--tyg-line-strong, var(--tyg-fg-dim))' }} />
-                <span style={{ fontSize: 'var(--tyg-text-2xl)', letterSpacing: 'var(--tyg-tracking-wide)', textTransform: 'uppercase', fontWeight: 'var(--tyg-w-regular)' }}>RustyHead</span>
+                <span className="tyg-hero-sub" style={{ fontSize: 'var(--tyg-text-2xl)', letterSpacing: 'var(--tyg-tracking-wide)', textTransform: 'uppercase', fontWeight: 'var(--tyg-w-regular)' }}>RustyHead</span>
                 <span style={{ width: 44, height: 1, background: 'var(--tyg-line-strong, var(--tyg-fg-dim))' }} />
               </div>
             </GridSnapTitle>
             {/* Meta strip — role headline, then fields (left) and location (right)
                 along the lower row line, with RustyHead now lifted into the title. */}
-            <div style={{ position: 'absolute', inset: 22, zIndex: 8, pointerEvents: 'none' }}>
+            <div className="tyg-hero-metascale" style={{ position: 'absolute', inset: 22, zIndex: 8, pointerEvents: 'none', transformOrigin: 'left bottom' }}>
               <div className="tyg-intro" style={{ '--iy': '24px', animationDelay: '0.54s', position: 'absolute', left: edge, right: edge, bottom: '7%', pointerEvents: 'auto', paddingTop: 22 }}>
                 <div className="tyg-hero-role" style={{ fontSize: 'var(--tyg-text-md)', letterSpacing: 'var(--tyg-tracking-wide)', textTransform: 'uppercase', color: 'var(--tyg-fg-muted)', marginBottom: 16 }}>Visual Artist&nbsp;&nbsp;/&nbsp;&nbsp;Interactive Engineer</div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', justifyContent: 'space-between', gap: '12px 40px' }}>
@@ -742,18 +863,23 @@
             layer takes the SAME lift as the foreground (so the blocks track the
             grid lines), but only AFTER their blur has eased to 0, so the lift's
             transform never nulls a live backdrop-filter. */}
-        <div className={started ? 'tyg-go' : undefined} style={{ position: 'absolute', inset: 22, zIndex: 5, pointerEvents: 'none', transform: layerTransform }}>
-        {GRID_BLOCKS.map((b, i) => (
+        <div className={'tyg-hero-blocks' + (started ? ' tyg-go' : '')} style={{ position: 'absolute', inset: 22, zIndex: 5, pointerEvents: 'none', transform: layerTransform }}>
+        {GEO.blocks.map((b, i) => {
+          // Per-block frost: blurred unless the block sets `blur: false`
+          // (then it's just a thin outline). Title box blur is separate.
+          const blurThis = b.blur !== false && blockBlurNow > 0.5;
+          return (
           <div key={i} className="tyg-grow-box" style={{
             position: 'absolute',
-            left: gx(b.c0) + '%', top: gy(b.y0) + '%',
-            width: (gx(b.c1) - gx(b.c0)) + '%', height: (gy(b.y1) - gy(b.y0)) + '%',
+            left: gX(b.c0) + '%', top: gy(b.y0) + '%',
+            width: (gX(b.c1) - gX(b.c0)) + '%', height: (gy(b.y1) - gy(b.y0)) + '%',
             background: 'rgba(243,243,243,0.05)', border: '1px solid rgba(243,243,243,0.16)',
-            backdropFilter: blockBlurNow > 0.5 ? `blur(${blockBlurNow}px)` : 'none',
-            WebkitBackdropFilter: blockBlurNow > 0.5 ? `blur(${blockBlurNow}px)` : 'none',
+            backdropFilter: blurThis ? `blur(${blockBlurNow}px)` : 'none',
+            WebkitBackdropFilter: blurThis ? `blur(${blockBlurNow}px)` : 'none',
             pointerEvents: 'none', '--gd': (0.18 + i * 0.07) + 's',
           }} />
-        ))}
+          );
+        })}
         </div>
 
         {/* ── Foreground — fades + drifts up with the scroll as the
@@ -762,7 +888,7 @@
 
         {/* Layer 6 — technical blueprint grid + animated scan / sweep */}
         <div style={{ position: 'absolute', inset: 0, zIndex: 6, pointerEvents: 'none' }}>
-          <GridField opacity={f.frame} />
+          <GridField opacity={f.frame} grid={GEO.grid} gx={gX} crosses={GEO.cross} />
           {/* Hairline frame — unfurls from the left as it eases in */}
           <div className="tyg-grow-h" style={{ position: 'absolute', inset: 22, border: '1px solid var(--tyg-line-soft)', opacity: f.frame, '--gd': '0.1s' }} />
         </div>
@@ -785,15 +911,15 @@
         {/* Secondary blueprint crosshairs — inset 22 so they share the grid;
             each sits on a (column line × row line) intersection */}
         <div className="tyg-intro" style={{ position: 'absolute', inset: 22, pointerEvents: 'none', '--ix': '8px', '--iy': '20px', animationDelay: '0.32s' }}>
-        {GRID_CROSS_FAINT.map((c, i) => (
-          <Cross key={'x' + i} top={gy(c.r) + '%'} left={gx(c.c) + '%'} delay={(i * 0.4) + 's'} />
+        {GEO.crossFaint.map((c, i) => (
+          <Cross key={'x' + i} top={gy(c.r) + '%'} left={gX(c.c) + '%'} delay={(i * 0.4) + 's'} />
         ))}
         </div>
 
         {/* Big editorial index — outlined year marker, top-left (layout 01 only) */}
         {layout === 1 && (
         <div className="tyg-intro tyg-hero-year" style={{ '--iy': '22px', animationDelay: '0.12s', position: 'absolute', top: 'clamp(72px, 9vh, 100px)', left: 'clamp(28px, 5.5vw, 80px)', zIndex: 9 }}>
-          <div style={{ fontFamily: 'var(--tyg-font-display)', fontWeight: 'var(--tyg-w-light)', fontSize: 'clamp(52px, 8.5vw, 120px)',
+          <div className="tyg-hero-yearnum" style={{ fontFamily: 'var(--tyg-font-display)', fontWeight: 'var(--tyg-w-light)', fontSize: 'clamp(52px, 8.5vw, 120px)',
             lineHeight: 0.86, letterSpacing: '0.02em', color: 'transparent', WebkitTextStroke: '1px var(--tyg-line-soft)' }}>2026</div>
           <div style={{ marginTop: 10, fontFamily: 'var(--tyg-font-mono)', fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--tyg-fg-faint)' }}>Portfolio · Ed.</div>
         </div>
@@ -802,7 +928,7 @@
         {/* Same outlined year marker, top-left for layout 03 */}
         {layout === 3 && (
         <div className="tyg-intro tyg-hero-year" style={{ '--iy': '22px', animationDelay: '0.12s', position: 'absolute', top: 'clamp(72px, 9vh, 100px)', left: 'clamp(28px, 5.5vw, 80px)', zIndex: 9 }}>
-          <div style={{ fontFamily: 'var(--tyg-font-display)', fontWeight: 'var(--tyg-w-light)', fontSize: 'clamp(52px, 8.5vw, 120px)',
+          <div className="tyg-hero-yearnum" style={{ fontFamily: 'var(--tyg-font-display)', fontWeight: 'var(--tyg-w-light)', fontSize: 'clamp(52px, 8.5vw, 120px)',
             lineHeight: 0.86, letterSpacing: '0.02em', color: 'transparent', WebkitTextStroke: '1px var(--tyg-line-soft)' }}>2026</div>
           <div style={{ marginTop: 10, fontFamily: 'var(--tyg-font-mono)', fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--tyg-fg-faint)' }}>Portfolio · Ed.</div>
         </div>

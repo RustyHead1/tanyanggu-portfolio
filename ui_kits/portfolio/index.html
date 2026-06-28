@@ -164,6 +164,13 @@
       transition: max-height 0.34s var(--tyg-ease);
     }
     .tyg-nav-drawer.open { max-height: 80vh; }
+    /* The collapsed drawer (max-height:0) otherwise stays 1px tall because of
+       its 1px border-top, and its opaque background paints that row as a stray
+       hairline at the nav's bottom edge — visible on the hero and doubling up
+       with the scroll-in nav border on page 2. Drop the border WIDTH to 0 while
+       closed so the box has zero height and paints nothing; it returns when the
+       drawer opens, where it correctly separates the menu from the bar. */
+    .tyg-nav-drawer:not(.open) { border-top-width: 0 !important; }
   }
 
   /* Works page — two-up grid collapses to a single column */
@@ -171,17 +178,31 @@
     .tyg-works-grid { grid-template-columns: 1fr !important; }
   }
 
-  /* Home — Selected Works slider: trim the oversized left counter so the
-     cards get room, and bring the slides to a phone-friendly size. */
+  /* Home — Selected Works slider, phone layout.
+     The desktop composition floats a big counter + nav over the LEFT of the
+     track (the active card sits just right of that overlay). On a phone there's
+     no room for side-by-side, so we restack it: the active card is CENTRED at
+     the top with its neighbours peeking, and the counter + nav drop to a bottom
+     bar. The active slot is always one slide-width in from the left edge, so we
+     translate the track left by 1.5 slide-widths to centre it (50vw - 1.5*84vw
+     = -76vw); keep these two numbers in sync if you retune the slide width. */
   @media (max-width: 680px) {
-    .tyg-ws-left    { width: 120px !important; padding-left: 2px !important; }
+    /* break the slider out of the section's side padding to full viewport width
+       so the centred-card math below is a clean function of vw */
+    .tyg-ws-root    { width: 100vw !important; margin-left: calc(50% - 50vw) !important;
+                      height: clamp(320px, calc(58vw + 96px), 400px) !important; }
+    /* card at the top, neighbours peeking either side */
+    .tyg-ws-trackrow{ align-items: flex-start !important; transform: translateX(-76vw); }
+    .tyg-ws-slide   { width: 84vw !important; height: clamp(220px, 58vw, 300px) !important;
+                      padding-left: 8px !important; padding-right: 8px !important; }
+    /* counter + nav → full-width bottom bar (drop the left gradient overlay) */
+    .tyg-ws-left    { inset: auto 0 0 0 !important; width: 100% !important; height: auto !important;
+                      background: none !important; padding: 0 26px 14px !important;
+                      align-items: stretch !important; }
+    .tyg-ws-ctrls   { flex-direction: row !important; height: auto !important; width: 100% !important;
+                      justify-content: space-between !important; align-items: center !important; }
     .tyg-ws-counter { font-size: 30px !important; }
-    /* keep an explicit height — the flex track has no fixed height, so a
-       percentage height would collapse the slide */
-    .tyg-ws-slide   {
-      width: 76vw !important; height: clamp(220px, 58vw, 280px) !important;
-      padding-left: 9px !important; padding-right: 9px !important;
-    }
+    .tyg-ws-nav     { gap: 14px !important; }
   }
 
   /* Profile — shrink the portrait + label columns so the copy can breathe */
@@ -195,19 +216,38 @@
     .tyg-proj-hero { aspect-ratio: 3 / 2 !important; }
   }
 
-  /* Home hero — declutter for a tall, narrow screen: thin the blueprint
-     grid, shrink the title, keep the role line to one tidy row, drop the
-     year marker + scroll cue (scrolling is implicit on touch) so nothing
-     overlaps the meta strip. */
+  /* ── Home hero, phone tuning ───────────────────────────────────────────
+     The marked values below are the knobs to tweak yourself. */
   @media (max-width: 600px) {
-    .tyg-hero-h1    { font-size: clamp(44px, 13.5vw, 74px) !important; }
-    .tyg-hero-year  { display: none !important; }
-    .tyg-hero-title { bottom: 30% !important; }
-    /* the dense vertical column rules read as clutter at phone width */
-    .tyg-hero-gridfield .tyg-grow-v { display: none !important; }
-    /* quieter role line that no longer sprawls past the title block */
-    .tyg-hero-role  { font-size: 12px !important; letter-spacing: 0.06em !important; margin-bottom: 12px !important; }
+    /* ▼ 标题文字大小（TAN / YANGGU） */
+    .tyg-hero-h1  { font-size: 52px !important; }
+    /* ▼ 副标题文字大小（RUSTYHEAD） */
+    .tyg-hero-sub { font-size: 20px !important; }
+
+    /* 标题磨砂方块现在吸附到手机端网格（见 LandingScreen.jsx 的 GRID_M，目前 6 列），
+       四边都落在网格线上。因此不能再对它用 transform 缩放——缩放会把方块
+       拉离网格线。要调标题大小，改下面 .tyg-hero-h1 的字号即可，方块会
+       自动重新吸附到网格。 */
+    /* .tyg-hero-titlescale { transform: none; }  ← 保持不缩放 */
+
+    /* ▼▼ 标题方块下方小字（角色行 / 领域 / 地点）的整体缩放（这块不吸附网格，可自由缩放） ▼▼ */
+    .tyg-hero-metascale  { transform: scale(0.65); }
+
+    /* 手机端标题方块的「位置 / 大小 / 到第几列」现在由 LandingScreen.jsx 的
+       TITLE_CELL_M 控制（c0,c1 = 左右到第几列；y0,y1 = 上下行）。文字在方块内
+       纵向居中、向左对齐。下面这条只对桌面端的标题位置生效。 */
+    /* .tyg-hero-title { bottom: 40% !important; } */
+
+    /* 2026 年份角标 → 移到方框左上角，顶边与顶边线（内框 22px）对齐 */
+    .tyg-hero-year    { top: 24px !important; left: 28px !important; }
+    /* ▼ 2026 字号（稍微缩小） */
+    .tyg-hero-yearnum { font-size: 40px !important; }
+    /* 隐藏 Scroll 提示 */
     .tyg-hero-scroll { display: none !important; }
+
+    /* 注意：手机端的背景网格 / 磨砂方块 / 十字现在由 LandingScreen.jsx 里的
+       GRID_M / GRID_BLOCKS_M / GRID_CROSS_M 这套网格（目前 6 列）驱动，方块和十字
+       都对齐到这套网格的线与交点。要增删/挪动，改那几个数组即可。 */
   }
 
   .tyg-footer {
