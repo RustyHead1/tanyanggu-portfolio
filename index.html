@@ -184,9 +184,11 @@
     .tyg-nav-drawer:not(.open) { border-top-width: 0 !important; }
   }
 
-  /* Works page — two-up grid collapses to a single column */
+  /* Works page — two-up grid collapses to a single column, and the display
+     heading drops from 52px so the two Japanese lines don't dominate the phone. */
   @media (max-width: 680px) {
     .tyg-works-grid { grid-template-columns: 1fr !important; }
+    .tyg-works-title { font-size: var(--tyg-text-3xl) !important; }
   }
 
   /* Home — Selected Works slider, phone layout.
@@ -253,6 +255,8 @@
     .tyg-hero-year    { top: 24px !important; left: 28px !important; }
     /* ▼ 2026 字号（稍微缩小） */
     .tyg-hero-yearnum { font-size: 40px !important; }
+    /* ▼ 2026 下方小字（Portfolio · Ed.）→ 收紧字距 + 缩小，避免横向超出方格 */
+    .tyg-hero-yearcap { font-size: 9px !important; letter-spacing: 0.1em !important; }
     /* 隐藏 Scroll 提示 */
     .tyg-hero-scroll { display: none !important; }
 

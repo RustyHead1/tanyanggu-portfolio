@@ -55,7 +55,7 @@
         <main style={{ maxWidth: 'var(--tyg-container)', margin: '0 auto', padding: '48px clamp(20px, 5vw, 72px) 96px' }}>
           <header style={{ marginBottom: 'var(--tyg-space-7)' }}>
             <Eyebrow>{lang === 'JA' ? '作品' : 'Selected Works'}</Eyebrow>
-            <h1 style={{ marginTop: 12, fontSize: 'var(--tyg-text-5xl)', fontWeight: 300, lineHeight: 1.1 }}>
+            <h1 className="tyg-works-title" style={{ marginTop: 12, fontSize: 'var(--tyg-text-5xl)', fontWeight: 300, lineHeight: 1.1 }}>
               {lang === 'JA' ? 'リアルタイムCGと' : 'Real-time CG &'}<br />
               {lang === 'JA' ? 'オーディオビジュアル' : 'audiovisual performance'}
             </h1>

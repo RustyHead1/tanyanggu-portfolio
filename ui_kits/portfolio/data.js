@@ -104,7 +104,7 @@ window.TYG_DATA = {
       title: 'LiVS / 僕の声、跳ね返る【武蔵β.Ver】Music Video',
       date: '2025.04',
       place: 'Music Video · Tokyo',
-      tags: ['AfterEffects', 'UnrealEngine', 'VR'],
+      tags: ['AfterEffects', 'UnrealEngine', 'VR', 'Co-creation'],
       youtube: '38Aww9iQOEg',
       image: 'assets/images/works/livs-01.png',
       gallery: [

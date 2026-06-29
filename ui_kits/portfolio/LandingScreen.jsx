@@ -24,7 +24,7 @@
     tint: '#11305a', tintStrength: 0.14, tintBlend: 'soft-light',
     // titleBlur = 标题方块磨砂模糊程度（px）。titleBgOpacity = 方块底色不透明度，
     // 0 = 纯透明，只剩模糊。两者就是你要调的值。
-    titleBlur: 14, frame: 0.68,
+    titleBlur: 8, frame: 0.68,
     titleBgColor: '#0a0a0b', titleBgOpacity: 0,
   };
   const TINTS = ['#11305a', '#3a1f4d', '#0a0a0b', '#5a3a11', '#1f4d3a'];
@@ -83,7 +83,7 @@
   // Tune freely: c = column index 0..6, r = row fraction (use GRID_M.rows
   // values + 0 and 1 so edges stay on lines). More cols/rows → tighter box.
   // The big 0.30→0.55 band is where the title block sits.
-  const GRID_M = { cols: 6, rows: [0.10, 0.20, 0.30, 0.55, 0.65, 0.79] };
+  const GRID_M = { cols: 6, rows: [0.10, 0.20, 0.30, 0.55, 0.65, 0.75] };
 
   // ── Title block (main title + subtitle + their frosted box) ────────────
   // The box is a FIXED grid cell, with the text centred vertically inside it
@@ -104,7 +104,7 @@
     { c0: 5, c1: 6, y0: 0.10, y1: 0.20 },   // top-right
     { c0: 5, c1: 6, y0: 0.20, y1: 0.30 },   // right
     { c0: 0, c1: 1, y0: 0.20, y1: 0.30 },   // left
-    { c0: 0, c1: 4, y0: 0.79, y1: 1 },      // bottom — one merged box (cols 0→4, like the title box)
+    { c0: 0, c1: 4, y0: 0.75, y1: 1 },      // bottom — one merged box (cols 0→4, like the title box)
   ];
   // Crosshairs — re-fitted to sit on the current line intersections.
   const GRID_CROSS_M = [
@@ -114,11 +114,13 @@
     { c: 2, r: 0.65, d: '1.0s' },
   ];
   const GRID_CROSS_FAINT_M = [
-    { c: 4, r: 0.20 }, { c: 1, r: 0.79 },
+    { c: 4, r: 0.20 }, { c: 1, r: 0.75 },
   ];
 
   function loadFilter() {
-    try { return { ...DEFAULTS, ...JSON.parse(localStorage.getItem(FILTER_KEY) || '{}') }; }
+    // titleBlur 永远用代码里的默认值，忽略本地存储里可能存下的旧值，
+    // 这样不管是否在本机调过滤镜，模糊程度都统一应用最新的设定。
+    try { return { ...DEFAULTS, ...JSON.parse(localStorage.getItem(FILTER_KEY) || '{}'), titleBlur: DEFAULTS.titleBlur }; }
     catch (e) { return { ...DEFAULTS }; }
   }
 
@@ -704,7 +706,7 @@
     const FROST_RAMP = 0.06;                                  // clear frost over first 6% of vh
     const frost = Math.min(scrollP / FROST_RAMP, 1);          // 0 → 1
     const titleBlurNow = f.titleBlur * (1 - frost);
-    const blockBlurNow = 8 * (1 - frost);                     // GRID_BLOCKS rest at blur(8px)
+    const blockBlurNow = 4 * (1 - frost);                     // GRID_BLOCKS rest at blur(4px)
 
     const fgAtRest = scrollP <= FROST_RAMP;                   // hold transforms off until frost cleared
     const op_t = Math.min(Math.max((scrollP - FROST_RAMP) / (0.74 - FROST_RAMP), 0), 1);
@@ -926,7 +928,7 @@
         <div className="tyg-intro tyg-hero-year" style={{ '--iy': '22px', animationDelay: '0.12s', position: 'absolute', top: 'clamp(72px, 9vh, 100px)', left: 'clamp(28px, 5.5vw, 80px)', zIndex: 9 }}>
           <div className="tyg-hero-yearnum" style={{ fontFamily: 'var(--tyg-font-display)', fontWeight: 'var(--tyg-w-light)', fontSize: 'clamp(52px, 8.5vw, 120px)',
             lineHeight: 0.86, letterSpacing: '0.02em', color: 'transparent', WebkitTextStroke: '1px var(--tyg-line-soft)' }}>2026</div>
-          <div style={{ marginTop: 10, fontFamily: 'var(--tyg-font-mono)', fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--tyg-fg-faint)' }}>Portfolio · Ed.</div>
+          <div className="tyg-hero-yearcap" style={{ marginTop: 10, fontFamily: 'var(--tyg-font-mono)', fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--tyg-fg-faint)' }}>Portfolio · Ed.</div>
         </div>
         )}
 
@@ -935,7 +937,7 @@
         <div className="tyg-intro tyg-hero-year" style={{ '--iy': '22px', animationDelay: '0.12s', position: 'absolute', top: 'clamp(72px, 9vh, 100px)', left: 'clamp(28px, 5.5vw, 80px)', zIndex: 9 }}>
           <div className="tyg-hero-yearnum" style={{ fontFamily: 'var(--tyg-font-display)', fontWeight: 'var(--tyg-w-light)', fontSize: 'clamp(52px, 8.5vw, 120px)',
             lineHeight: 0.86, letterSpacing: '0.02em', color: 'transparent', WebkitTextStroke: '1px var(--tyg-line-soft)' }}>2026</div>
-          <div style={{ marginTop: 10, fontFamily: 'var(--tyg-font-mono)', fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--tyg-fg-faint)' }}>Portfolio · Ed.</div>
+          <div className="tyg-hero-yearcap" style={{ marginTop: 10, fontFamily: 'var(--tyg-font-mono)', fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--tyg-fg-faint)' }}>Portfolio · Ed.</div>
         </div>
         )}
 
